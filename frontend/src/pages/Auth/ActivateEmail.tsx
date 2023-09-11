@@ -1,0 +1,1 @@
+export const ActivateEmail = () => <p>Email Activated! you can now sign in.</p>

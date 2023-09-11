@@ -1,0 +1,1 @@
+export const ActivateError = () => <p>you fucked up!</p>
