@@ -20,14 +20,12 @@ const (
 
 type User struct {
 	gorm.Model
-	ID         string `gorm:"primary_key"`
-	FirstName  string `form:"first_name" json:"first_name,omitempty"`
-	LastName   string `form:"last_name" json:"last_name,omitempty"`
-	Password   string `form:"password" json:"password" binding:"required"`
-	Email      string `gorm:"type:varchar(110);uniqueIndex" form:"email" json:"email,omitempty" binding:"required,email"`
-	UserLevel  UserLevel
-	UserStatus UserStatus
-	Events     []UserEvent
+	ID          string     `gorm:"primary_key"`
+	DisplayName string     `json:"displayName,omitempty"`
+	Password    string     `json:"-" binding:"required"`
+	Email       string     `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty" binding:"required,email"`
+	UserLevel   UserLevel  `json:"-"`
+	UserStatus  UserStatus `json:"-"`
 }
 
 func (user *User) BeforeCreate(scope *gorm.DB) error {

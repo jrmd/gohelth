@@ -21,8 +21,6 @@ func RegisterRoutes(route *gin.Engine) {
 	route.POST("/api/v1/auth/sign-out", controllers.SignOut)
 	route.GET("/api/v1/auth/me", controllers.GetCurrentUser)
 
-	route.POST("/api/v1/users", controllers.SearchUsers)
-
 	route.GET("/api/v1/user", controllers.GetCurrentUser)
 	route.GET("/api/v1/user/settings", controllers.GetSettings)
 	route.POST("/api/v1/user", controllers.UpdateProfile)

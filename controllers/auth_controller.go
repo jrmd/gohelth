@@ -94,13 +94,7 @@ func SignUp(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"id":        user.ID,
-		"email":     user.Email,
-		"level":     user.UserLevel,
-		"firstName": user.FirstName,
-		"lastName":  user.LastName,
-	})
+	ctx.JSON(http.StatusOK, user)
 }
 
 func ActivateUser(id string, token string) (*models.User, error) {
@@ -227,11 +221,5 @@ func GetCurrentUser(ctx *gin.Context) {
 
 	database.DB.Where("id = ?", session.Get("user")).First(user)
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"id":        user.ID,
-		"email":     user.Email,
-		"level":     user.UserLevel,
-		"firstName": user.FirstName,
-		"lastName":  user.LastName,
-	})
+	ctx.JSON(http.StatusOK, user)
 }
