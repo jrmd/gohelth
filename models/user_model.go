@@ -31,6 +31,6 @@ type User struct {
 }
 
 func (user *User) BeforeCreate(scope *gorm.DB) error {
-	scope.Statement.SetColumn("ID", puid.WithPrefix("user:").New())
+	scope.Statement.SetColumn("ID", puid.New())
 	return nil
 }

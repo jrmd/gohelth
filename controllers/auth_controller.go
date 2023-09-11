@@ -133,10 +133,9 @@ func ActivateUser(id string, token string) (*models.User, error) {
 func ActivateUserPage(ctx *gin.Context) {
 	user := ctx.Param("user")
 	token := ctx.Param("token")
-	_, err := ActivateUser("user:"+user, token)
+	_, err := ActivateUser(user, token)
 
 	if err != nil {
-		//ctx.HTML(http.StatusBadRequest, "", gin.)
 		ctx.Redirect(302, "/auth/activate/error?error="+err.Error())
 		return
 	}

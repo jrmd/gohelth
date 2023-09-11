@@ -24,7 +24,7 @@ type UserEvent struct {
 }
 
 func (user *UserEvent) BeforeCreate(scope *gorm.DB) error {
-	scope.Statement.SetColumn("ID", puid.WithPrefix("user_event:").New())
+	scope.Statement.SetColumn("ID", puid.New())
 	scope.Statement.SetColumn("ExpiresIn", time.Now().Add(time.Hour*24))
 	return nil
 }
