@@ -3,6 +3,7 @@ package routers
 import (
 	"fresh-perspectives/controllers"
 	"fresh-perspectives/helpers"
+	"fresh-perspectives/routers/middleware"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -19,18 +20,6 @@ func RegisterRoutes(route *gin.Engine) {
 	route.POST("/api/v1/auth/sign-up", controllers.SignUp)
 	route.POST("/api/v1/auth/sign-in", controllers.SignIn)
 	route.POST("/api/v1/auth/sign-out", controllers.SignOut)
-	route.GET("/api/v1/auth/me", controllers.GetCurrentUser)
-
-	route.GET("/api/v1/user", controllers.GetCurrentUser)
-	route.GET("/api/v1/user/settings", controllers.GetSettings)
-	route.POST("/api/v1/user", controllers.UpdateProfile)
-	route.POST("/api/v1/user/settings", controllers.UpdateSettings)
-
-	route.GET("/", func(ctx *gin.Context) {
-		helpers.Page(ctx, 200, &gin.H{
-			"title": "Home",
-		})
-	})
 
 	route.GET("/auth/activate/error", func(ctx *gin.Context) {
 		helpers.Page(ctx, 400, &gin.H{
@@ -54,6 +43,27 @@ func RegisterRoutes(route *gin.Engine) {
 		session.Save()
 
 		ctx.Redirect(302, "/")
+	})
+
+	route.GET("/api/v1/user", controllers.GetCurrentUser)
+	route.GET("/api/v1/user/settings", controllers.GetSettings)
+	route.POST("/api/v1/user", controllers.UpdateProfile)
+	route.POST("/api/v1/user/settings", controllers.UpdateSettings)
+
+	group := route.Group("/", middleware.RequireLoggedIn)
+
+	group.GET("/api/v1/auth/me", controllers.GetCurrentUser)
+
+	group.GET("/", func(ctx *gin.Context) {
+		helpers.Page(ctx, 200, &gin.H{
+			"title": "Home",
+		})
+	})
+
+	route.GET("/unauthorized", func(ctx *gin.Context) {
+		helpers.Page(ctx, 403, &gin.H{
+			"title": "Unauthorized",
+		})
 	})
 
 	route.NoRoute(func(ctx *gin.Context) {

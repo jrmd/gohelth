@@ -24,7 +24,7 @@ type User struct {
 	DisplayName string     `json:"displayName,omitempty"`
 	Password    string     `json:"-" binding:"required"`
 	Email       string     `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty" binding:"required,email"`
-	UserLevel   UserLevel  `json:"-"`
+	UserLevel   UserLevel  `json:"userLevel"`
 	UserStatus  UserStatus `json:"-"`
 }
 

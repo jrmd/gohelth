@@ -11,6 +11,7 @@ import {ActivateEmail} from "./pages/Auth/ActivateEmail";
 import {AuthProvider} from "./helpers";
 import {SignIn} from "./pages/Auth/SignIn";
 import {SignUp} from "./pages/Auth/SignUp";
+import {Admin} from "./pages/Admin";
 import {SignOut} from "./pages/Auth/SignOut";
 
 
@@ -27,6 +28,7 @@ export function App() {
 						<SignUp path="/auth/sign-up" />
 						<ActivateError path="/auth/activate/error" />
 						<ActivateEmail path="/auth/activate/success" />
+						<Admin path="/admin/:rest?" />
 						<NotFound default />
 					</Router>
 				</main>
