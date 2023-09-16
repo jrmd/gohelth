@@ -1,5 +1,6 @@
 import { createContext } from 'preact';
 import {useContext, useState, useEffect } from 'preact/hooks';
+import {shallowEqual} from "./helpers/shallowEqual";
 
 export const AuthContext = createContext<{ user: User | boolean, checkAuth: () => void, clearAuth: () => void, isLoading: boolean }>(false)
 
@@ -22,9 +23,13 @@ export const AuthProvider = ({ children }) => {
             }
 
             const json = await resp.json();
-            setUser(json)
+
+            if (!shallowEqual(user, json)) {
+                setUser(json)
+            }
 
             setTimeout(() => {
+                console.log("checking Authentication!");
                 checkAuth()
             }, 10000)
         } catch (e) {

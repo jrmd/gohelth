@@ -37,6 +37,11 @@ func RegisterRoutes(route *gin.Engine) {
 			"title": "Sign In",
 		})
 	})
+	route.GET("/auth/sign-up", func(ctx *gin.Context) {
+		helpers.Page(ctx, 200, &gin.H{
+			"title": "Sign Up",
+		})
+	})
 	route.GET("/auth/sign-out", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
 		session.Delete("user")

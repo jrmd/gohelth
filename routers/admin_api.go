@@ -15,4 +15,6 @@ func RegisterAdminApiRoutes(route *gin.RouterGroup) {
 	route.PUT("/exercise", controllers.CreateExercise)
 	route.DELETE("/exercise/:id", controllers.DeleteExercise)
 	route.PATCH("/exercise/:id", controllers.UpdateExercise)
+
+	route.GET("/stats", controllers.GetStatistics)
 }

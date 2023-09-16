@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fresh-perspectives/infra/database"
 	"github.com/thechriswalker/puid"
 	"gorm.io/gorm"
 )
@@ -33,4 +34,11 @@ type User struct {
 func (user *User) BeforeCreate(scope *gorm.DB) error {
 	scope.Statement.SetColumn("ID", puid.New())
 	return nil
+}
+
+func (user *User) Count() int64 {
+	var result int64
+	database.DB.Table("users").Count(&result)
+
+	return result
 }

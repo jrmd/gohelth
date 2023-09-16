@@ -1,22 +1,20 @@
 import Router, {route} from 'preact-router';
 import {useAuth} from "../../helpers";
+import { Dashboard } from "./Pages/Dashboard";
+import { Categories } from "./Pages/Categories";
+import { Exercises } from "./Pages/Exercises";
 
 const Test = () => {
     return <p>Test</p>
 }
 
-const Dashboard = () => {
-    return <p>Dashboard</p>
-}
 
 export const Admin = () => {
     const {user, isLoading} = useAuth();
 
-    if (isLoading) {
+    if (!user && isLoading) {
         return <p>Loading...</p>
     }
-
-    console.log(1, user);
 
     if (user.userLevel !== "ADMIN") {
         route("/unauthorized")
@@ -26,7 +24,8 @@ export const Admin = () => {
     return (
         <Router>
             <Dashboard path="/admin" />
-            <Test path="/admin/test" />
+            <Categories path="/admin/categories" />
+            <Exercises path="/admin/exercises" />
         </Router>
     )
 }

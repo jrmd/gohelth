@@ -8,13 +8,18 @@ import (
 func RegisterAdminRoutes(route *gin.RouterGroup) {
 	route.GET("/", func(ctx *gin.Context) {
 		helpers.Page(ctx, 200, &gin.H{
-			"title": "Hello",
+			"title": "Admin Dashboard",
 		})
 	})
 
-	route.GET("/test", func(ctx *gin.Context) {
+	route.GET("/categories", func(ctx *gin.Context) {
 		helpers.Page(ctx, 200, &gin.H{
-			"title": "Hello",
+			"title": "Categories",
+		})
+	})
+	route.GET("/exercises", func(ctx *gin.Context) {
+		helpers.Page(ctx, 200, &gin.H{
+			"title": "Exercises",
 		})
 	})
 }

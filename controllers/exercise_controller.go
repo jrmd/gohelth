@@ -147,7 +147,7 @@ func GetExercise(ctx *gin.Context) {
 }
 
 func GetExercises(ctx *gin.Context) {
-	const PerPage = 10
+	var PerPage float64 = 100
 	pageStr := ctx.Query("page")
 	page, err := strconv.Atoi(pageStr)
 
@@ -156,7 +156,12 @@ func GetExercises(ctx *gin.Context) {
 	}
 
 	var exercises []models.Exercise
-	database.DB.Preload("Categories").Limit(PerPage).Offset((page - 1) * PerPage).Order("created_at desc").Find(&exercises)
+
+	if page == -1 {
+		database.DB.Preload("Categories").Order("created_at desc").Find(&exercises)
+	} else {
+		database.DB.Preload("Categories").Limit(int(PerPage)).Offset((page - 1) * int(PerPage)).Order("created_at desc").Find(&exercises)
+	}
 
 	var exercise models.Exercise
 
