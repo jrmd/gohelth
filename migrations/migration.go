@@ -11,6 +11,12 @@ func Migrate() {
 	var migrationModels = []interface{}{
 		&models.User{},
 		&models.UserEvent{},
+		&models.Exercise{},
+		&models.Category{},
+		&models.Workout{},
+		&models.WorkoutExercise{},
+		&models.Routine{},
+		&models.RoutineExercise{},
 	}
 
 	err := database.DB.AutoMigrate(migrationModels...)

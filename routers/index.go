@@ -45,14 +45,7 @@ func RegisterRoutes(route *gin.Engine) {
 		ctx.Redirect(302, "/")
 	})
 
-	route.GET("/api/v1/user", controllers.GetCurrentUser)
-	route.GET("/api/v1/user/settings", controllers.GetSettings)
-	route.POST("/api/v1/user", controllers.UpdateProfile)
-	route.POST("/api/v1/user/settings", controllers.UpdateSettings)
-
 	group := route.Group("/", middleware.RequireLoggedIn)
-
-	group.GET("/api/v1/auth/me", controllers.GetCurrentUser)
 
 	group.GET("/", func(ctx *gin.Context) {
 		helpers.Page(ctx, 200, &gin.H{

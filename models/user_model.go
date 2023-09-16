@@ -26,6 +26,8 @@ type User struct {
 	Email       string     `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty" binding:"required,email"`
 	UserLevel   UserLevel  `json:"userLevel"`
 	UserStatus  UserStatus `json:"-"`
+	Workouts    []Workout
+	Routines    []Routine
 }
 
 func (user *User) BeforeCreate(scope *gorm.DB) error {

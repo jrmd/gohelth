@@ -33,6 +33,8 @@ func SetupRoute() *gin.Engine {
 	router.Use(sessions.Sessions(viper.GetString("SESSION_NAME"), store))
 
 	RegisterRoutes(router) //routes register
+	RegisterUserApiRoutes(router.Group("/api/v1/", middleware.RequireLoggedIn))
 	RegisterAdminRoutes(router.Group("/admin", middleware.RequireAdmin))
+	RegisterAdminApiRoutes(router.Group("/api/v1/admin", middleware.RequireAdmin))
 	return router
 }
