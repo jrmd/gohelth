@@ -31,7 +31,7 @@ server {
         proxy_set_header    X-Forwarded-Proto  $scheme;
         proxy_set_header    X-Real-IP          $remote_addr;
         proxy_set_header    Host               $host;
-        proxy_pass http://go-server:8000;
+        proxy_pass http://go-server;
     }
 }
 
