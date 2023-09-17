@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"fresh-perspectives/infra/database"
 	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
@@ -8,12 +9,14 @@ import (
 
 type Category struct {
 	gorm.Model
+	ID        int64 `json:",string" gorm:"primary_key"`
 	Name      string
 	ParentId  int64      `gorm:"index"`
 	Exercises []Exercise `gorm:"many2many:exercise_category"`
 }
 
 func (category *Category) BeforeCreate(scope *gorm.DB) error {
+	fmt.Println(category)
 	if category.ID == 0 {
 		scope.Statement.SetColumn("ID", snowflake.ID())
 	}

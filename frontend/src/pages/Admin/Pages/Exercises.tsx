@@ -57,6 +57,9 @@ export const Exercises = () => {
     const [level, setLevel] = useState("");
     const [force, setForce] = useState("");
     const [mechanic, setMechanic] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("");
+    const [primaryMuscle, setPrimaryMuscle] = useState("");
+    const [secondaryMuscle, setSecondaryMuscle] = useState("");
 
     const fetchExercises = async (signal) => {
         try {
@@ -73,6 +76,15 @@ export const Exercises = () => {
             }
             if (mechanic.length > 0) {
                 url.searchParams.set("mechanic", mechanic);
+            }
+            if (categoryFilter.length > 0) {
+                url.searchParams.set("categories", categoryFilter);
+            }
+            if (primaryMuscle.length > 0) {
+                url.searchParams.set("primary", primaryMuscle);
+            }
+            if (secondaryMuscle.length > 0) {
+                url.searchParams.set("secondary", secondaryMuscle);
             }
             const resp = await fetch(url.toString(), { signal })
             if (!resp.ok) {
@@ -96,7 +108,7 @@ export const Exercises = () => {
         }
         const response = await resp.json();
 
-        setCategories(response.data);
+        setMuscles(response.data);
     };
 
     const fetchCategories = async () => {
@@ -116,11 +128,11 @@ export const Exercises = () => {
         return () => {
             signal.abort()
         }
-    }, [page, search, level, force, mechanic]);
+    }, [page, search, level, force, mechanic, primaryMuscle, secondaryMuscle, categoryFilter]);
 
     useEffect(() => {
-        fetchCategories();
-        fetchMuscles();
+        void fetchCategories();
+        void fetchMuscles();
     }, []);
 
     return (
@@ -161,7 +173,38 @@ export const Exercises = () => {
                             <option value="compound">Compound</option>
                         </select>
                     </div>
-                    <div></div>
+                    <div>
+                        <select onChange={(event) => {
+                            setPage(1)
+                            setCategoryFilter(event.target.value)
+                        }}>
+                            <option value="">Category</option>
+                            {categories.map((category) => {
+                                console.log(category)
+                                return (
+                                    <option value={category.ID}>{category.Name}</option>
+                                )
+                            })}
+                        </select>
+                        <select onChange={(event) => {
+                            setPage(1)
+                            setPrimaryMuscle(event.target.value)
+                        }}>
+                            <option value="">Primary</option>
+                            {muscles.map((muscle) => (
+                                <option value={muscle.ID}>{muscle.Name}</option>
+                            ))}
+                        </select>
+                        <select onChange={(event) => {
+                            setPage(1)
+                            setSecondaryMuscle(event.target.value)
+                        }}>
+                            <option value="">Secondary</option>
+                            {muscles.map((muscle) => (
+                                <option value={muscle.ID}>{muscle.Name}</option>
+                            ))}
+                        </select>
+                    </div>
                     <div>
                         <div></div>
                         { page > 1 && (

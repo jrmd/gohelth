@@ -8,6 +8,7 @@ import (
 
 type Routine struct {
 	gorm.Model
+	ID        int64 `json:",string" gorm:"primary_key"`
 	Name      string
 	Public    bool
 	UserID    string

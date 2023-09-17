@@ -7,6 +7,7 @@ import (
 
 type RoutineExercise struct {
 	gorm.Model
+	ID         int64 `json:",string" gorm:"primary_key"`
 	Name       string
 	RoutineID  int64
 	Routine    Routine

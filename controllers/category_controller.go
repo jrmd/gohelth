@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"fresh-perspectives/infra/database"
 	"fresh-perspectives/models"
 	"fresh-perspectives/repository"
@@ -121,13 +122,18 @@ func GetCategories(ctx *gin.Context) {
 	}
 
 	var categories []models.Category
-	database.DB.Limit(PerPage).Offset((page - 1) * PerPage).Order("name asc").Find(&categories)
+	db := database.DB.Model(categories)
 
-	var category models.Category
+	var count int64
+	db.Count(&count)
+
+	db.Limit(PerPage).Offset((page - 1) * PerPage).Order("name asc").Find(&categories)
+
+	fmt.Println(categories)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"data":        categories,
-		"maxPages":    math.Ceil(float64(category.Count()) / PerPage),
+		"maxPages":    math.Ceil(float64(count) / PerPage),
 		"currentPage": page,
 	})
 }

@@ -305,6 +305,7 @@ func GetExercises(ctx *gin.Context) {
 	} else {
 		data = make([]models.Exercise, 0)
 	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"data":        data,
 		"maxPages":    math.Ceil(float64(count) / PerPage),
