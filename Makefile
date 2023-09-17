@@ -17,6 +17,10 @@ build:
 	docker-compose -f docker-compose-dev.yml down build
 
 production:
+	cd frontend
+	pnpm build
+	cd ../
+	docker-compose -f docker-compose-prod.yml down
 	docker-compose -f docker-compose-prod.yml up -d --build
 
 clean:
