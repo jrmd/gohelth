@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/thechriswalker/puid"
+	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
 	"time"
 )
@@ -15,8 +15,7 @@ const (
 
 type UserEvent struct {
 	gorm.Model
-	ID        string `gorm:"primary_key"`
-	UserID    string
+	UserID    int64
 	User      User
 	EventType UserEventType
 	Token     string
@@ -24,7 +23,9 @@ type UserEvent struct {
 }
 
 func (user *UserEvent) BeforeCreate(scope *gorm.DB) error {
-	scope.Statement.SetColumn("ID", puid.New())
+	if user.ID == 0 {
+		scope.Statement.SetColumn("ID", snowflake.ID())
+	}
 	scope.Statement.SetColumn("ExpiresIn", time.Now().Add(time.Hour*24))
 	return nil
 }

@@ -8,7 +8,7 @@ export const SignUp = () => {
     const userRef = useRef();
     const passRef = useRef();
     const [loading, setLoading] = useState<boolean | string>(false);
-    const [success, setSuccess] = useState<boolean>(true);
+    const [success, setSuccess] = useState<boolean>(false);
     useTitle("Sign Up");
 
     const handleSubmit = async (event) => {

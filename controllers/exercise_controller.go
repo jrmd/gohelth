@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"fresh-perspectives/helpers"
 	"fresh-perspectives/infra/database"
 	"fresh-perspectives/models"
@@ -20,6 +19,12 @@ func CreateExercise(ctx *gin.Context) {
 	instructions := ctx.DefaultPostForm("instructions", "")
 	public := ctx.DefaultPostForm("public", "")
 	categories := ctx.DefaultPostForm("categories", "")
+	primaryMuscles := ctx.DefaultPostForm("primaryMuscles", "")
+	secondaryMuscles := ctx.DefaultPostForm("secondaryMuscles", "")
+	equipment := ctx.DefaultPostForm("equipment", "")
+	mechanic := ctx.DefaultPostForm("mechanic", "")
+	level := ctx.DefaultPostForm("level", "")
+	force := ctx.DefaultPostForm("force", "")
 
 	if name == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -35,6 +40,10 @@ func CreateExercise(ctx *gin.Context) {
 	exercise.SupportsWeight = supportsWeight == "true"
 	exercise.SupportsDistance = supportsDistance == "true"
 	exercise.Public = public == "true"
+	exercise.Equipment = equipment
+	exercise.Mechanic = mechanic
+	exercise.Level = level
+	exercise.Force = force
 
 	exercise.Instructions = instructions
 
@@ -44,6 +53,20 @@ func CreateExercise(ctx *gin.Context) {
 
 	database.DB.Find(&Categories, categoryIds)
 	exercise.Categories = Categories
+
+	primaryMusclesIds := strings.Split(primaryMuscles, ",")
+
+	var PrimaryMuscles []models.Muscle
+
+	database.DB.Find(&PrimaryMuscles, primaryMusclesIds)
+	exercise.PrimaryMuscles = PrimaryMuscles
+
+	secondaryMusclesIds := strings.Split(secondaryMuscles, ",")
+
+	var SecondaryMuscles []models.Muscle
+
+	database.DB.Find(&SecondaryMuscles, secondaryMusclesIds)
+	exercise.SecondaryMuscles = SecondaryMuscles
 
 	err := database.DB.Create(&exercise).Error
 
@@ -63,7 +86,7 @@ func UpdateExercise(ctx *gin.Context) {
 	exercise := new(models.Exercise)
 	database.DB.Where("id = ?", id).First(exercise)
 
-	if exercise.ID == "" {
+	if exercise.ID == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",
 			"message": "Not found!",
@@ -77,12 +100,11 @@ func UpdateExercise(ctx *gin.Context) {
 	supportsDistance := ctx.DefaultPostForm("supportsDistance", "")
 	instructions := ctx.DefaultPostForm("instructions", "")
 	public := ctx.DefaultPostForm("public", "")
-	categories := ctx.DefaultPostForm("categories", "")
 
-	categoryIds := strings.Split(categories, ",")
-	categoryIds = helpers.RemoveEmptyStrings(categoryIds)
-
-	fmt.Println(categoryIds)
+	equipment := ctx.DefaultPostForm("equipment", "")
+	mechanic := ctx.DefaultPostForm("mechanic", "")
+	level := ctx.DefaultPostForm("level", "")
+	force := ctx.DefaultPostForm("force", "")
 
 	if name != "" {
 		exercise.Name = name
@@ -108,21 +130,67 @@ func UpdateExercise(ctx *gin.Context) {
 		exercise.Instructions = instructions
 	}
 
+	if equipment != "" {
+		exercise.Equipment = equipment
+	}
+
+	if mechanic != "" {
+		exercise.Mechanic = mechanic
+	}
+
+	if level != "" {
+		exercise.Level = level
+	}
+
+	if force != "" {
+		exercise.Force = force
+	}
+
 	err := database.DB.Save(exercise).Error
 
+	categories := ctx.DefaultPostForm("categories", "")
+	categoryIds := strings.Split(categories, ",")
+	categoryIds = helpers.RemoveEmptyStrings(categoryIds)
+
 	if err == nil && len(categoryIds) > 0 {
-		fmt.Println("here?!", len(categoryIds))
 		var Categories []models.Category
 
 		database.DB.Find(&Categories, categoryIds)
-		fmt.Println("here?!", Categories)
 		err = database.DB.Model(&exercise).Association("Categories").Replace(Categories)
 	}
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
-			"message": "Something went wrong whilst trying to delete the exercise",
+			"message": "Something went wrong whilst trying to save categories on the exercise",
+		})
+		return
+	}
+
+	primaryMuscles := ctx.DefaultPostForm("primaryMuscles", "")
+	primaryMusclesIds := strings.Split(primaryMuscles, ",")
+	primaryMusclesIds = helpers.RemoveEmptyStrings(primaryMusclesIds)
+
+	if err == nil && len(primaryMusclesIds) > 0 {
+		var PrimaryMuscles []models.Muscle
+		database.DB.Find(&PrimaryMuscles, primaryMusclesIds)
+		err = database.DB.Model(&exercise).Association("PrimaryMuscles").Replace(PrimaryMuscles)
+	}
+
+	secondaryMuscles := ctx.DefaultPostForm("secondaryMuscles", "")
+	secondaryMusclesIds := strings.Split(secondaryMuscles, ",")
+	secondaryMusclesIds = helpers.RemoveEmptyStrings(secondaryMusclesIds)
+
+	if err == nil && len(secondaryMusclesIds) > 0 {
+		var SecondaryMuscles []models.Muscle
+		database.DB.Find(&SecondaryMuscles, secondaryMusclesIds)
+		err = database.DB.Model(&exercise).Association("SecondaryMuscles").Replace(SecondaryMuscles)
+	}
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": "Something went wrong whilst trying to save categories on the exercise",
 		})
 		return
 	}
@@ -133,9 +201,9 @@ func UpdateExercise(ctx *gin.Context) {
 func GetExercise(ctx *gin.Context) {
 	id := ctx.Param("id")
 	exercise := new(models.Exercise)
-	database.DB.Preload("Categories").Where("id = ?", id).First(exercise)
+	database.DB.Preload("Categories").Preload("PrimaryMuscles").Preload("SecondaryMuscles").Where("id = ?", id).First(exercise)
 
-	if exercise.ID == "" {
+	if exercise.ID == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",
 			"message": "Not found!",
@@ -149,6 +217,13 @@ func GetExercise(ctx *gin.Context) {
 func GetExercises(ctx *gin.Context) {
 	var PerPage float64 = 100
 	pageStr := ctx.Query("page")
+	name := ctx.Query("name")
+	level := ctx.Query("level")
+	machine := ctx.Query("machine")
+	force := ctx.Query("force")
+	equipment := ctx.Query("equipment")
+	public := ctx.Query("public")
+
 	page, err := strconv.Atoi(pageStr)
 
 	if err != nil {
@@ -157,10 +232,36 @@ func GetExercises(ctx *gin.Context) {
 
 	var exercises []models.Exercise
 
+	db := database.DB.Preload("Categories").Preload("PrimaryMuscles").Preload("SecondaryMuscles")
+
+	if name != "" {
+		db.Where("name iLIKE ?", "%"+name+"%")
+	}
+
+	if level != "" {
+		db.Where("level = ?", level)
+	}
+
+	if machine != "" {
+		db.Where("machine = ?", machine)
+	}
+
+	if force != "" {
+		db.Where("force = ?", force)
+	}
+
+	if equipment != "" {
+		db.Where("equipment = ?", equipment)
+	}
+
+	if public != "" {
+		db.Where("public = ?", public == "true")
+	}
+
 	if page == -1 {
-		database.DB.Preload("Categories").Order("created_at desc").Find(&exercises)
+		db.Order("name asc").Find(&exercises)
 	} else {
-		database.DB.Preload("Categories").Limit(int(PerPage)).Offset((page - 1) * int(PerPage)).Order("created_at desc").Find(&exercises)
+		db.Limit(int(PerPage)).Offset((page - 1) * int(PerPage)).Order("name asc").Find(&exercises)
 	}
 
 	var exercise models.Exercise

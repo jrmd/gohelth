@@ -15,4 +15,5 @@ func RegisterUserApiRoutes(route *gin.RouterGroup) {
 
 	route.GET("/category", controllers.GetCategories)
 	route.GET("/exercise", controllers.GetExercises)
+	route.GET("/muscles", controllers.GetMuscles)
 }

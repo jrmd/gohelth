@@ -14,6 +14,7 @@ import {SignIn} from "./pages/Auth/SignIn";
 import {SignUp} from "./pages/Auth/SignUp";
 import {Admin} from "./pages/Admin";
 import {SignOut} from "./pages/Auth/SignOut";
+import {NotAllowed} from "./pages/_403";
 
 
 export function App() {
@@ -61,7 +62,8 @@ export function App() {
 						<SignUp path="/auth/sign-up" />
 						<ActivateError path="/auth/activate/error" />
 						<ActivateEmail path="/auth/activate/success" />
-						<Admin path="/admin/:rest?" />
+						<Admin path="/admin/:rest*" />
+						<NotAllowed path="/unauthorized" />
 						<NotFound default />
 					</Router>
 				</main>

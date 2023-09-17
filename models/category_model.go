@@ -2,21 +2,20 @@ package models
 
 import (
 	"fresh-perspectives/infra/database"
-	"github.com/thechriswalker/puid"
+	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
 )
 
 type Category struct {
 	gorm.Model
-	ID        string `gorm:"primary_key"`
 	Name      string
-	ParentId  string     `gorm:"index"`
+	ParentId  int64      `gorm:"index"`
 	Exercises []Exercise `gorm:"many2many:exercise_category"`
 }
 
 func (category *Category) BeforeCreate(scope *gorm.DB) error {
-	if category.ID == "" {
-		scope.Statement.SetColumn("ID", puid.New())
+	if category.ID == 0 {
+		scope.Statement.SetColumn("ID", snowflake.ID())
 	}
 	return nil
 }
@@ -27,5 +26,3 @@ func (category *Category) Count() int64 {
 
 	return result
 }
-
-//plmma8lhe000288xnm6ue7sok,plmma8lhe000188xnshi9j1he

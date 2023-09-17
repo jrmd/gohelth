@@ -2,14 +2,13 @@ package models
 
 import (
 	"fresh-perspectives/infra/database"
-	"github.com/thechriswalker/puid"
+	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
 	"time"
 )
 
 type Workout struct {
 	gorm.Model
-	ID        string `gorm:"primary_key"`
 	Name      string
 	StartTime time.Time
 	EndTime   time.Time
@@ -20,8 +19,8 @@ type Workout struct {
 }
 
 func (workout *Workout) BeforeCreate(scope *gorm.DB) error {
-	if workout.ID == "" {
-		scope.Statement.SetColumn("ID", puid.New())
+	if workout.ID == 0 {
+		scope.Statement.SetColumn("ID", snowflake.ID())
 	}
 	return nil
 }

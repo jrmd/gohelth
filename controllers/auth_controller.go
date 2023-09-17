@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"crypto/rand"
 	"errors"
 	"fmt"
 	"fresh-perspectives/helpers"
@@ -11,10 +10,9 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"github.com/thechriswalker/puid"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"strings"
+	"strconv"
 )
 
 func SignUp(ctx *gin.Context) {
@@ -42,9 +40,7 @@ func SignUp(ctx *gin.Context) {
 	maybeUser := new(models.User)
 	database.DB.Where("email = ?", email).First(maybeUser)
 
-	fmt.Println(maybeUser)
-
-	if maybeUser.ID != "" {
+	if maybeUser.ID != 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": "error",
 			"error":  "User already exists",
@@ -66,8 +62,7 @@ func SignUp(ctx *gin.Context) {
 		})
 	}
 
-	token := make([]byte, 64)
-	_, err = rand.Read(token)
+	token, err := helpers.GenerateRandomString(64)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -77,15 +72,13 @@ func SignUp(ctx *gin.Context) {
 	}
 
 	userEvent := new(models.UserEvent)
-	userEvent.UserID = user.ID
+	userEvent.UserID = int64(user.ID)
 	userEvent.EventType = models.ACTIVATION
-	userEvent.Token = puid.Cuid().New()
+	userEvent.Token = token
 
 	repository.Save(userEvent)
 
-	idWithOutPrefix, _ := strings.CutPrefix(user.ID, "user:")
-
-	err = helpers.SendMail(email, "Activate your account!", "Activate it here: http://localhost:8000/auth/activate/"+idWithOutPrefix+"/"+userEvent.Token)
+	err = helpers.SendMail(email, "Activate your account!", "Activate it here: http://localhost:8000/auth/activate/"+strconv.Itoa(int(user.ID))+"/"+userEvent.Token)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -102,13 +95,19 @@ func ActivateUser(id string, token string) (*models.User, error) {
 		return nil, errors.New("invalid_params")
 	}
 
+	userId, err := strconv.ParseInt(id, 10, 64)
+
+	if err != nil {
+		return nil, errors.New("invalid_userid")
+	}
+
 	user := new(models.User)
-	database.DB.Where("id = ?", id).First(user)
+	database.DB.Where("id = ?", userId).First(user)
 
 	userEvent := new(models.UserEvent)
 	database.
 		DB.
-		Where("user_id = ?", id).
+		Where("user_id = ?", userId).
 		Where("event_type = ?", models.ACTIVATION).
 		First(userEvent)
 
@@ -152,7 +151,7 @@ func SignIn(ctx *gin.Context) {
 
 	database.DB.Where("email = ?", email).First(user)
 
-	if user.ID == "" {
+	if user.ID == 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": "error",
 			"error":  "Invalid username or password",
@@ -220,6 +219,14 @@ func GetCurrentUser(ctx *gin.Context) {
 	}
 
 	database.DB.Where("id = ?", session.Get("user")).First(user)
+
+	if user.ID == 0 {
+		ctx.JSON(http.StatusForbidden, gin.H{
+			"status": "error",
+			"error":  "not_allowed",
+		})
+		return
+	}
 
 	ctx.JSON(http.StatusOK, user)
 }

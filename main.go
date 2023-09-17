@@ -6,6 +6,7 @@ import (
 	"fresh-perspectives/infra/logger"
 	"fresh-perspectives/migrations"
 	"fresh-perspectives/routers"
+	"github.com/godruoyi/go-snowflake"
 	"github.com/spf13/viper"
 	"time"
 )
@@ -28,6 +29,7 @@ func main() {
 	//later separate migration
 	migrations.Migrate()
 
+	snowflake.SetMachineID(snowflake.PrivateIPToMachineID())
 	router := routers.SetupRoute()
 	logger.Fatalf("%v", router.Run(config.ServerConfig()))
 

@@ -29,12 +29,13 @@ func RequireAdmin(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.Redirect(302, "/auth/sign-in")
+		ctx.Abort()
 		return
 	}
 
-	fmt.Println("user level", user)
 	if user.UserLevel != "ADMIN" {
 		ctx.Redirect(302, "/unauthorized")
+		ctx.Abort()
 		return
 	}
 

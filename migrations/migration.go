@@ -12,6 +12,7 @@ func Migrate() {
 		&models.User{},
 		&models.UserEvent{},
 		&models.Exercise{},
+		&models.Muscle{},
 		&models.Category{},
 		&models.Workout{},
 		&models.WorkoutExercise{},

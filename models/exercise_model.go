@@ -2,25 +2,30 @@ package models
 
 import (
 	"fresh-perspectives/infra/database"
-	"github.com/thechriswalker/puid"
+	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
 )
 
 type Exercise struct {
 	gorm.Model
-	ID               string `gorm:"primary_key"`
 	Name             string
 	SupportsWeight   bool
 	SupportsTime     bool
 	SupportsDistance bool
 	Instructions     string
 	Public           bool
+	Force            string
+	Level            string
+	Equipment        string
+	Mechanic         string
 	Categories       []Category `gorm:"many2many:exercise_category"`
+	PrimaryMuscles   []Muscle   `gorm:"many2many:exercise_primary_muscle"`
+	SecondaryMuscles []Muscle   `gorm:"many2many:exercise_secondary_muscle"`
 }
 
 func (exercise *Exercise) BeforeCreate(scope *gorm.DB) error {
-	if exercise.ID == "" {
-		scope.Statement.SetColumn("ID", puid.New())
+	if exercise.ID == 0 {
+		scope.Statement.SetColumn("ID", snowflake.ID())
 	}
 	return nil
 }

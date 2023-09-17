@@ -10,12 +10,12 @@ import (
 	"strconv"
 )
 
-func CreateCategory(ctx *gin.Context) {
+func CreateMuscle(ctx *gin.Context) {
 	name := ctx.DefaultPostForm("name", "")
 	parentId := ctx.DefaultPostForm("parent", "")
 
-	category := new(models.Category)
-	category.Name = name
+	muscle := new(models.Muscle)
+	muscle.Name = name
 
 	if name == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -34,28 +34,28 @@ func CreateCategory(ctx *gin.Context) {
 			})
 			return
 		}
-		category.ParentId = parent
+		muscle.ParentId = parent
 	}
 
-	err := repository.Save(category)
+	err := repository.Save(muscle)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
-			"message": "Something went wrong whilst trying to create the category",
+			"message": "Something went wrong whilst trying to create the muscle",
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, category)
+	ctx.JSON(http.StatusCreated, muscle)
 }
 
-func UpdateCategory(ctx *gin.Context) {
+func UpdateMuscle(ctx *gin.Context) {
 	id := ctx.Param("id")
-	category := new(models.Category)
-	database.DB.Where("id = ?", id).First(category)
+	muscle := new(models.Muscle)
+	database.DB.Where("id = ?", id).First(muscle)
 
-	if category.ID == 0 {
+	if muscle.ID == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",
 			"message": "Not found!",
@@ -67,7 +67,7 @@ func UpdateCategory(ctx *gin.Context) {
 	parentId := ctx.DefaultPostForm("parent", "")
 
 	if name != "" {
-		category.Name = name
+		muscle.Name = name
 	}
 
 	if parentId != "" {
@@ -79,28 +79,28 @@ func UpdateCategory(ctx *gin.Context) {
 			})
 			return
 		}
-		category.ParentId = parent
+		muscle.ParentId = parent
 	}
 
-	err := database.DB.Save(category).Error
+	err := database.DB.Save(muscle).Error
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
-			"message": "Something went wrong whilst trying to delete the category",
+			"message": "Something went wrong whilst trying to delete the muscle",
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, category)
+	ctx.JSON(http.StatusOK, muscle)
 }
 
-func GetCategory(ctx *gin.Context) {
+func GetMuscle(ctx *gin.Context) {
 	id := ctx.Param("id")
-	category := new(models.Category)
-	database.DB.Where("id = ?", id).First(category)
+	muscle := new(models.Muscle)
+	database.DB.Where("id = ?", id).First(muscle)
 
-	if category.ID == 0 {
+	if muscle.ID == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",
 			"message": "Not found!",
@@ -108,10 +108,10 @@ func GetCategory(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, category)
+	ctx.JSON(http.StatusOK, muscle)
 }
 
-func GetCategories(ctx *gin.Context) {
+func GetMuscles(ctx *gin.Context) {
 	const PerPage = 100
 	pageStr := ctx.Query("page")
 	page, err := strconv.Atoi(pageStr)
@@ -120,34 +120,34 @@ func GetCategories(ctx *gin.Context) {
 		page = 1
 	}
 
-	var categories []models.Category
-	database.DB.Limit(PerPage).Offset((page - 1) * PerPage).Order("name asc").Find(&categories)
+	var muscles []models.Muscle
+	database.DB.Limit(PerPage).Offset((page - 1) * PerPage).Order("name asc").Find(&muscles)
 
-	var category models.Category
+	var muscle models.Muscle
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"data":        categories,
-		"maxPages":    math.Ceil(float64(category.Count()) / PerPage),
+		"data":        muscles,
+		"maxPages":    math.Ceil(float64(muscle.Count()) / PerPage),
 		"currentPage": page,
 	})
 }
 
-func DeleteCategory(ctx *gin.Context) {
+func DeleteMuscle(ctx *gin.Context) {
 	id := ctx.Param("id")
-	category := new(models.Category)
-	database.DB.Where("id = ?", id).First(category)
+	muscle := new(models.Muscle)
+	database.DB.Where("id = ?", id).First(muscle)
 
-	err := database.DB.Delete(category).Error
+	err := database.DB.Delete(muscle).Error
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
-			"message": "Something went wrong whilst trying to delete the category",
+			"message": "Something went wrong whilst trying to delete the muscle",
 		})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  "success",
-		"message": "Category deleted",
+		"message": "Muscle deleted",
 	})
 }

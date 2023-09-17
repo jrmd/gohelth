@@ -2,7 +2,7 @@ package models
 
 import (
 	"fresh-perspectives/infra/database"
-	"github.com/thechriswalker/puid"
+	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
 )
 
@@ -21,7 +21,6 @@ const (
 
 type User struct {
 	gorm.Model
-	ID          string     `gorm:"primary_key"`
 	DisplayName string     `json:"displayName,omitempty"`
 	Password    string     `json:"-" binding:"required"`
 	Email       string     `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty" binding:"required,email"`
@@ -32,7 +31,9 @@ type User struct {
 }
 
 func (user *User) BeforeCreate(scope *gorm.DB) error {
-	scope.Statement.SetColumn("ID", puid.New())
+	if user.ID == 0 {
+		scope.Statement.SetColumn("ID", snowflake.ID())
+	}
 	return nil
 }
 

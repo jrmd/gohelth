@@ -1,17 +1,16 @@
 package models
 
 import (
-	"github.com/thechriswalker/puid"
+	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
 )
 
 type RoutineExercise struct {
 	gorm.Model
-	ID         string `gorm:"primary_key"`
 	Name       string
-	RoutineID  string
+	RoutineID  int64
 	Routine    Routine
-	ExerciseID string
+	ExerciseID int64
 	Exercise   Exercise
 	Sets       int
 	Reps       int
@@ -19,8 +18,8 @@ type RoutineExercise struct {
 }
 
 func (exercise *RoutineExercise) BeforeCreate(scope *gorm.DB) error {
-	if exercise.ID == "" {
-		scope.Statement.SetColumn("ID", puid.New())
+	if exercise.ID == 0 {
+		scope.Statement.SetColumn("ID", snowflake.ID())
 	}
 	return nil
 }

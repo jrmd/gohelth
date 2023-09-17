@@ -1,8 +1,8 @@
 package models
 
 import (
+	"github.com/godruoyi/go-snowflake"
 	"github.com/jackc/pgtype"
-	"github.com/thechriswalker/puid"
 	"gorm.io/gorm"
 )
 
@@ -14,19 +14,18 @@ type WorkoutSet struct {
 
 type WorkoutExercise struct {
 	gorm.Model
-	ID         string `gorm:"primary_key"`
 	Name       string
-	WorkoutID  string
+	WorkoutID  int64
 	Workout    Workout
-	ExerciseID string
+	ExerciseID int64
 	Exercise   Exercise
 	Sets       pgtype.JSONB `gorm:"type:jsonb;default:'[]';not null"`
 	RestTime   string       `gorm:"default:'01:00';not null"`
 }
 
 func (exercise *WorkoutExercise) BeforeCreate(scope *gorm.DB) error {
-	if exercise.ID == "" {
-		scope.Statement.SetColumn("ID", puid.New())
+	if exercise.ID == 0 {
+		scope.Statement.SetColumn("ID", snowflake.ID())
 	}
 	return nil
 }

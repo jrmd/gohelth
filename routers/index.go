@@ -58,7 +58,7 @@ func RegisterRoutes(route *gin.Engine) {
 		})
 	})
 
-	route.GET("/unauthorized", func(ctx *gin.Context) {
+	route.Any("/unauthorized", func(ctx *gin.Context) {
 		helpers.Page(ctx, 403, &gin.H{
 			"title": "Unauthorized",
 		})
