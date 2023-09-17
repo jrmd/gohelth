@@ -49,6 +49,8 @@ const displayExercise = (cats, level = 0) => (
 export const Exercises = () => {
     useTitle("Exercises");
     const [exercises, setExercises] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [muscles, setMuscles] = useState([]);
     const [page, setPage] = useState(1);
     const [maxPages, setMaxPage] = useState(1);
     const [search, setSearch] = useState("");
@@ -87,6 +89,26 @@ export const Exercises = () => {
         }
     }
 
+    const fetchMuscles = async () => {
+        const resp = await fetch('/api/v1/muscles?page=-1')
+        if (!resp.ok) {
+            return;
+        }
+        const response = await resp.json();
+
+        setCategories(response.data);
+    };
+
+    const fetchCategories = async () => {
+        const resp = await fetch('/api/v1/category?page=-1')
+        if (!resp.ok) {
+            return;
+        }
+        const response = await resp.json();
+
+        setCategories(response.data);
+    }
+
     useEffect(() => {
         const signal = new AbortController()
         void fetchExercises(signal.signal);
@@ -95,6 +117,11 @@ export const Exercises = () => {
             signal.abort()
         }
     }, [page, search, level, force, mechanic]);
+
+    useEffect(() => {
+        fetchCategories();
+        fetchMuscles();
+    }, []);
 
     return (
         <div className="p-8 pt-6 container">
