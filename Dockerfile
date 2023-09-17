@@ -27,7 +27,7 @@ WORKDIR /root/
 
 # Copy the Pre-built binary file from the previous stage. Also copy config yml file
 COPY --from=builder /app/main .
-COPY --from=builder /app/frontend .
+COPY --from=builder /app/frontend ./frontend
 COPY --from=builder /app/.env .env
 
 #Command to run the executable
