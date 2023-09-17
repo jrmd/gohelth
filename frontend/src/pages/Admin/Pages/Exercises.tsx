@@ -96,16 +96,6 @@ export const Exercises = () => {
         }
     }, [page, search, level, force, mechanic]);
 
-    useEffect(() => {
-        const signal = new AbortController()
-
-        void fetchExercises(signal.signal)
-
-        return () => {
-            signal.abort()
-        }
-    }, []);
-
     return (
         <div className="p-8 pt-6 container">
             <h2 className="text-3xl font-bold tracking-tight">Exercises</h2>
