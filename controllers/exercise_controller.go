@@ -215,7 +215,7 @@ func GetExercise(ctx *gin.Context) {
 }
 
 func GetExercises(ctx *gin.Context) {
-	var PerPage float64 = 100
+	var PerPage float64 = 20
 	pageStr := ctx.Query("page")
 	name := ctx.Query("name")
 	level := ctx.Query("level")

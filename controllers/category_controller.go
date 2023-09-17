@@ -112,7 +112,7 @@ func GetCategory(ctx *gin.Context) {
 }
 
 func GetCategories(ctx *gin.Context) {
-	const PerPage = 100
+	const PerPage = 20
 	pageStr := ctx.Query("page")
 	page, err := strconv.Atoi(pageStr)
 
