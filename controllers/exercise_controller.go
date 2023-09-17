@@ -223,6 +223,18 @@ func GetExercises(ctx *gin.Context) {
 	force := ctx.Query("force")
 	equipment := ctx.Query("equipment")
 	public := ctx.Query("public")
+	mechanic := ctx.Query("mechanic")
+	categories := ctx.Query("categories")
+	categoryIds := strings.Split(categories, ",")
+	categoryIds = helpers.RemoveEmptyStrings(categoryIds)
+
+	primary := ctx.Query("primary")
+	primaryIds := strings.Split(primary, ",")
+	primaryIds = helpers.RemoveEmptyStrings(primaryIds)
+
+	secondary := ctx.Query("secondary")
+	secondaryIds := strings.Split(secondary, ",")
+	secondaryIds = helpers.RemoveEmptyStrings(secondaryIds)
 
 	page, err := strconv.Atoi(pageStr)
 
@@ -232,7 +244,7 @@ func GetExercises(ctx *gin.Context) {
 
 	var exercises []models.Exercise
 
-	db := database.DB.Preload("Categories").Preload("PrimaryMuscles").Preload("SecondaryMuscles")
+	db := database.DB.Preload("Categories").Preload("PrimaryMuscles").Preload("SecondaryMuscles").Model(&models.Exercise{})
 
 	if name != "" {
 		db.Where("name iLIKE ?", "%"+name+"%")
@@ -258,17 +270,44 @@ func GetExercises(ctx *gin.Context) {
 		db.Where("public = ?", public == "true")
 	}
 
+	if mechanic != "" {
+		db.Where("mechanic = ?", mechanic)
+	}
+
+	if len(categoryIds) > 0 {
+		db.Joins("inner join exercise_category ec on ec.exercise_id = exercises.id").
+			Where("ec.category_id in ?", categoryIds)
+	}
+
+	if len(primaryIds) > 0 {
+		db.Joins("inner join exercise_primary_muscle epm on epm.exercise_id = exercises.id").
+			Where("epm.muscle_id in ?", primaryIds)
+	}
+
+	if len(secondaryIds) > 0 {
+		db.Joins("inner join exercise_secondary_muscle esm on esm.exercise_id = exercises.id").
+			Where("esm.muscle_id in ?", secondaryIds)
+	}
+
+	var count int64
+	db.Count(&count)
+
 	if page == -1 {
 		db.Order("name asc").Find(&exercises)
 	} else {
 		db.Limit(int(PerPage)).Offset((page - 1) * int(PerPage)).Order("name asc").Find(&exercises)
 	}
 
-	var exercise models.Exercise
+	var data []models.Exercise
 
+	if count > 0 {
+		data = exercises
+	} else {
+		data = make([]models.Exercise, 0)
+	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"data":        exercises,
-		"maxPages":    math.Ceil(float64(exercise.Count()) / PerPage),
+		"data":        data,
+		"maxPages":    math.Ceil(float64(count) / PerPage),
 		"currentPage": page,
 	})
 }
