@@ -78,7 +78,7 @@ func SignUp(ctx *gin.Context) {
 
 	repository.Save(userEvent)
 
-	err = helpers.SendMail(email, "Activate your account!", "Activate it here: http://localhost:8000/auth/activate/"+strconv.Itoa(int(user.ID))+"/"+userEvent.Token)
+	err = helpers.SendMail(email, "Activate your account!", "Activate it here:"+viper.GetString("DOMAIN_NAME")+"/auth/activate/"+strconv.Itoa(int(user.ID))+"/"+userEvent.Token)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
