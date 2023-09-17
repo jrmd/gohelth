@@ -4,7 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite build --watch",
-		"build": "vite build",
+		"build": "vite build"
 	},
 	"dependencies": {
 		"hoofd": "^1.7.0",
