@@ -11,6 +11,8 @@ services:
     volumes:
       - prod_postgres_data:/var/lib/postgresql/data/
     restart: always
+    ports:
+      - "5432:5432"
 
   server:
     container_name: go_server
@@ -26,6 +28,7 @@ services:
     restart: on-failure
   nginx:
     image: nginx:1.15-alpine
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     ports:
       - "80:80"
       - "443:443"
