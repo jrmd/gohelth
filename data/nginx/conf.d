@@ -1,3 +1,7 @@
+upstream go-server {
+    server go_server:8000;
+}
+
 server {
     listen 80;
     server_name go.helth.lol;
@@ -27,7 +31,7 @@ server {
         proxy_set_header    X-Forwarded-Proto  $scheme;
         proxy_set_header    X-Real-IP          $remote_addr;
         proxy_set_header    Host               $host;
-        proxy_pass http://go_server:8000;
+        proxy_pass http://go-server:8000;
     }
 }
 
