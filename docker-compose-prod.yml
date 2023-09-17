@@ -23,6 +23,7 @@ services:
       - postgres_db
     links:
       - postgres_db:postgres_db
+      - nginx
     restart: on-failure
   nginx:
     image: nginx:1.15-alpine
