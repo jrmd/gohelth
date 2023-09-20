@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"fresh-perspectives/controllers"
 	"github.com/gin-gonic/gin"
+	"helth/controllers"
 )
 
 func RegisterAdminApiRoutes(route *gin.RouterGroup) {
@@ -20,6 +20,8 @@ func RegisterAdminApiRoutes(route *gin.RouterGroup) {
 	route.PUT("/muscle", controllers.CreateMuscle)
 	route.DELETE("/muscle/:id", controllers.DeleteMuscle)
 	route.PATCH("/muscle/:id", controllers.UpdateMuscle)
+
+	route.GET("/users", controllers.GetAllUsers)
 
 	route.GET("/stats", controllers.GetStatistics)
 }

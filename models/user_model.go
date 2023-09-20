@@ -1,9 +1,9 @@
 package models
 
 import (
-	"fresh-perspectives/infra/database"
 	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
+	"helth/infra/database"
 )
 
 type UserLevel string
@@ -21,12 +21,12 @@ const (
 
 type User struct {
 	gorm.Model
-	ID          int64      `json:",string" gorm:"primary_key"`
-	DisplayName string     `json:"displayName,omitempty"`
-	Password    string     `json:"-" binding:"required"`
-	Email       string     `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty" binding:"required,email"`
-	UserLevel   UserLevel  `json:"userLevel"`
-	UserStatus  UserStatus `json:"-"`
+	ID          int64     `json:",string" gorm:"primary_key"`
+	DisplayName string    `json:"displayName,omitempty"`
+	Password    string    `json:"-" binding:"required"`
+	Email       string    `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty" binding:"required,email"`
+	UserLevel   UserLevel `json:"userLevel"`
+	UserStatus  UserStatus
 	Workouts    []Workout
 	Routines    []Routine
 }

@@ -1,12 +1,12 @@
 package routers
 
 import (
-	"fresh-perspectives/routers/middleware"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"helth/routers/middleware"
 )
 
 func SetupRoute() *gin.Engine {

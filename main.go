@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fresh-perspectives/config"
-	"fresh-perspectives/infra/database"
-	"fresh-perspectives/infra/logger"
-	"fresh-perspectives/migrations"
-	"fresh-perspectives/routers"
 	"github.com/godruoyi/go-snowflake"
 	"github.com/spf13/viper"
+	"helth/config"
+	"helth/infra/database"
+	"helth/infra/logger"
+	"helth/migrations"
+	"helth/routers"
 	"time"
 )
 

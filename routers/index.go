@@ -1,11 +1,11 @@
 package routers
 
 import (
-	"fresh-perspectives/controllers"
-	"fresh-perspectives/helpers"
-	"fresh-perspectives/routers/middleware"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"helth/controllers"
+	"helth/helpers"
+	"helth/routers/middleware"
 	"net/http"
 )
 

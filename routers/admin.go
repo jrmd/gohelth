@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"fresh-perspectives/helpers"
 	"github.com/gin-gonic/gin"
+	"helth/helpers"
 )
 
 func RegisterAdminRoutes(route *gin.RouterGroup) {

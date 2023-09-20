@@ -1,8 +1,8 @@
 package migrations
 
 import (
-	"fresh-perspectives/infra/database"
-	"fresh-perspectives/models"
+	"helth/infra/database"
+	"helth/models"
 )
 
 // Migrate Add list of model add for migrations

@@ -3,14 +3,14 @@ package controllers
 import (
 	"errors"
 	"fmt"
-	"fresh-perspectives/helpers"
-	"fresh-perspectives/infra/database"
-	"fresh-perspectives/models"
-	"fresh-perspectives/repository"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
+	"helth/helpers"
+	"helth/infra/database"
+	"helth/models"
+	"helth/repository"
 	"net/http"
 	"strconv"
 )

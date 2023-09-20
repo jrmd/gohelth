@@ -1,9 +1,9 @@
 package models
 
 import (
-	"fresh-perspectives/infra/database"
 	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
+	"helth/infra/database"
 	"time"
 )
 

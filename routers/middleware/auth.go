@@ -3,10 +3,10 @@ package middleware
 import (
 	"errors"
 	"fmt"
-	"fresh-perspectives/infra/database"
-	"fresh-perspectives/models"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"helth/infra/database"
+	"helth/models"
 )
 
 func getUser(ctx *gin.Context) (*models.User, error) {

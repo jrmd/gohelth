@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"fresh-perspectives/controllers"
 	"github.com/gin-gonic/gin"
+	"helth/controllers"
 )
 
 func RegisterUserApiRoutes(route *gin.RouterGroup) {

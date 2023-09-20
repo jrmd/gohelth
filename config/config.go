@@ -1,8 +1,8 @@
 package config
 
 import (
-	"fresh-perspectives/infra/logger"
 	"github.com/spf13/viper"
+	"helth/infra/logger"
 )
 
 type Configuration struct {

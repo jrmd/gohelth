@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"fresh-perspectives/infra/database"
-	"fresh-perspectives/models"
-	"fresh-perspectives/repository"
 	"github.com/gin-gonic/gin"
+	"helth/infra/database"
+	"helth/models"
+	"helth/repository"
 	"math"
 	"net/http"
 	"strconv"

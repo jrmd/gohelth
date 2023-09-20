@@ -1,4 +1,4 @@
-module fresh-perspectives
+module helth
 
 go 1.17
 

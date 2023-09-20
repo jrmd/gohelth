@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"fresh-perspectives/infra/database"
-	"fresh-perspectives/infra/logger"
+	"helth/infra/database"
+	"helth/infra/logger"
 )
 
 func Save(model interface{}) error {

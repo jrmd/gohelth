@@ -7,6 +7,7 @@ import {CategoryImport} from "./Pages/CategoryImport";
 import {MuscleImport} from "./Pages/MuscleImport";
 import {Muscles} from "./Pages/Muscles";
 import {ExerciseImport} from "./Pages/ExerciseImport";
+import { Users } from "./Pages/Users";
 
 const Test = () => {
     return <p>Test</p>
@@ -34,6 +35,7 @@ export const Admin = () => {
             <Muscles path="/admin/muscles" />
             <ExerciseImport path="/admin/exercises/import" />
             <Exercises path="/admin/exercises" />
+            <Users path="/admin/users" />
         </Router>
     )
 }
