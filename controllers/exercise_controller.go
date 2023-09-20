@@ -91,8 +91,20 @@ func CreateExercise(ctx *gin.Context) {
 
 func UpdateExercise(ctx *gin.Context) {
 	id := ctx.Param("id")
+	user, authErr := middleware.GetUser(ctx)
+
+	if authErr != nil {
+		// do nothing
+	}
+
 	exercise := new(models.Exercise)
-	database.DB.Where("id = ?", id).First(exercise)
+	db := database.DB.Where("id = ?", id)
+
+	if user.UserLevel != models.ADMIN {
+		db.Where("user_id = ?", user.ID)
+	}
+
+	db.First(exercise)
 
 	if exercise.ID == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{
@@ -437,7 +449,13 @@ func DeleteExercise(ctx *gin.Context) {
 	}
 
 	exercise := new(models.Exercise)
-	database.DB.Where("id = ? and user_id = ?", id, user.ID).First(exercise)
+	db := database.DB.Where("id = ?", id)
+
+	if user.UserLevel != models.ADMIN {
+		db.Where("user_id = ?", user.ID)
+	}
+
+	db.First(exercise)
 
 	err := database.DB.Delete(exercise).Error
 	if err != nil {
