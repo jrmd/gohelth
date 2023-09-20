@@ -220,8 +220,20 @@ func UpdateExercise(ctx *gin.Context) {
 
 func GetExercise(ctx *gin.Context) {
 	id := ctx.Param("id")
+	user, authErr := middleware.GetUser(ctx)
+
+	if authErr != nil {
+		// do nothing
+	}
+
 	exercise := new(models.Exercise)
-	database.DB.Preload("Categories").Preload("PrimaryMuscles").Preload("SecondaryMuscles").Where("id = ?", id).First(exercise)
+	db := database.DB.Preload("Categories").Preload("PrimaryMuscles").Preload("SecondaryMuscles").Where("id = ?", id)
+
+	if user.UserLevel != models.ADMIN {
+		db.Where("user_id = ?", user.ID)
+	}
+
+	db.First(exercise)
 
 	if exercise.ID == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{

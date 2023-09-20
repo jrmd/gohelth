@@ -16,4 +16,10 @@ func RegisterUserApiRoutes(route *gin.RouterGroup) {
 	route.GET("/category", controllers.GetCategories)
 	route.GET("/exercise", controllers.GetMyExercises)
 	route.GET("/muscles", controllers.GetMuscles)
+
+	route.GET("/exercise/:id", controllers.GetExercise)
+	route.PUT("/exercise", controllers.CreateExercise)
+	route.DELETE("/exercise/:id", controllers.DeleteExercise)
+	route.PATCH("/exercise/:id", controllers.UpdateExercise)
+
 }
