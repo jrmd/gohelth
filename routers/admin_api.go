@@ -22,6 +22,7 @@ func RegisterAdminApiRoutes(route *gin.RouterGroup) {
 	route.PATCH("/muscle/:id", controllers.UpdateMuscle)
 
 	route.GET("/users", controllers.GetAllUsers)
+	route.GET("/exercises", controllers.GetExercises)
 
 	route.GET("/stats", controllers.GetStatistics)
 }

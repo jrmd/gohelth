@@ -5,6 +5,7 @@ import (
 	"helth/helpers"
 	"helth/infra/database"
 	"helth/models"
+	"helth/routers/middleware"
 	"math"
 	"net/http"
 	"strconv"
@@ -288,6 +289,113 @@ func GetExercises(ctx *gin.Context) {
 		db.Joins("inner join exercise_secondary_muscle esm on esm.exercise_id = exercises.id").
 			Where("esm.muscle_id in ?", secondaryIds)
 	}
+
+	var count int64
+	db.Count(&count)
+
+	if page == -1 {
+		db.Order("name asc").Find(&exercises)
+	} else {
+		db.Limit(int(PerPage)).Offset((page - 1) * int(PerPage)).Order("name asc").Find(&exercises)
+	}
+
+	var data []models.Exercise
+
+	if count > 0 {
+		data = exercises
+	} else {
+		data = make([]models.Exercise, 0)
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"data":        data,
+		"maxPages":    math.Ceil(float64(count) / PerPage),
+		"currentPage": page,
+	})
+}
+
+func GetMyExercises(ctx *gin.Context) {
+	var PerPage float64 = 100
+	user, authErr := middleware.GetUser(ctx)
+
+	if authErr != nil {
+		// do nothing
+	}
+
+	pageStr := ctx.Query("page")
+	name := ctx.Query("name")
+	level := ctx.Query("level")
+	machine := ctx.Query("machine")
+	force := ctx.Query("force")
+	equipment := ctx.Query("equipment")
+	public := ctx.Query("public")
+	mechanic := ctx.Query("mechanic")
+	categories := ctx.Query("categories")
+	categoryIds := strings.Split(categories, ",")
+	categoryIds = helpers.RemoveEmptyStrings(categoryIds)
+
+	primary := ctx.Query("primary")
+	primaryIds := strings.Split(primary, ",")
+	primaryIds = helpers.RemoveEmptyStrings(primaryIds)
+
+	secondary := ctx.Query("secondary")
+	secondaryIds := strings.Split(secondary, ",")
+	secondaryIds = helpers.RemoveEmptyStrings(secondaryIds)
+
+	page, err := strconv.Atoi(pageStr)
+
+	if err != nil {
+		page = 1
+	}
+
+	var exercises []models.Exercise
+
+	db := database.DB.Preload("Categories").Preload("PrimaryMuscles").Preload("SecondaryMuscles").Model(&models.Exercise{})
+
+	if name != "" {
+		db.Where("name iLIKE ?", "%"+name+"%")
+	}
+
+	if level != "" {
+		db.Where("level = ?", level)
+	}
+
+	if machine != "" {
+		db.Where("machine = ?", machine)
+	}
+
+	if force != "" {
+		db.Where("force = ?", force)
+	}
+
+	if equipment != "" {
+		db.Where("equipment = ?", equipment)
+	}
+
+	if public != "" {
+		db.Where("public = ?", public == "true")
+	}
+
+	if mechanic != "" {
+		db.Where("mechanic = ?", mechanic)
+	}
+
+	if len(categoryIds) > 0 {
+		db.Joins("inner join exercise_category ec on ec.exercise_id = exercises.id").
+			Where("ec.category_id in ?", categoryIds)
+	}
+
+	if len(primaryIds) > 0 {
+		db.Joins("inner join exercise_primary_muscle epm on epm.exercise_id = exercises.id").
+			Where("epm.muscle_id in ?", primaryIds)
+	}
+
+	if len(secondaryIds) > 0 {
+		db.Joins("inner join exercise_secondary_muscle esm on esm.exercise_id = exercises.id").
+			Where("esm.muscle_id in ?", secondaryIds)
+	}
+
+	db.Where("public = ? OR user_id = ?", "true", user.ID)
 
 	var count int64
 	db.Count(&count)

@@ -19,6 +19,7 @@ type Exercise struct {
 	Level            string
 	Equipment        string
 	Mechanic         string
+	UserID           int64      `gorm:"index"`
 	Categories       []Category `gorm:"many2many:exercise_category"`
 	PrimaryMuscles   []Muscle   `gorm:"many2many:exercise_primary_muscle"`
 	SecondaryMuscles []Muscle   `gorm:"many2many:exercise_secondary_muscle"`

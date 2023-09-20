@@ -9,7 +9,7 @@ import (
 	"helth/models"
 )
 
-func getUser(ctx *gin.Context) (*models.User, error) {
+func GetUser(ctx *gin.Context) (*models.User, error) {
 	var user = new(models.User)
 	session := sessions.Default(ctx)
 
@@ -25,7 +25,7 @@ func getUser(ctx *gin.Context) (*models.User, error) {
 }
 
 func RequireAdmin(ctx *gin.Context) {
-	user, err := getUser(ctx)
+	user, err := GetUser(ctx)
 
 	if err != nil {
 		ctx.Redirect(302, "/auth/sign-in")
@@ -43,7 +43,7 @@ func RequireAdmin(ctx *gin.Context) {
 }
 
 func RequireLoggedIn(ctx *gin.Context) {
-	_, err := getUser(ctx)
+	_, err := GetUser(ctx)
 
 	if err != nil {
 		ctx.Redirect(302, "/auth/sign-in")

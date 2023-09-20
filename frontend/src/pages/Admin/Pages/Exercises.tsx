@@ -63,7 +63,7 @@ export const Exercises = () => {
 
     const fetchExercises = async (signal) => {
         try {
-            const url = new URL(window.location.origin + '/api/v1/exercise');
+            const url = new URL(window.location.origin + '/api/v1/admin/exercises');
             url.searchParams.set("page", page);
             if (search.length > 0) {
                 url.searchParams.set("name", search);
