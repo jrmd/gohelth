@@ -27,6 +27,12 @@ func CreateExercise(ctx *gin.Context) {
 	level := ctx.DefaultPostForm("level", "")
 	force := ctx.DefaultPostForm("force", "")
 
+	user, authErr := middleware.GetUser(ctx)
+
+	if authErr != nil {
+		// do nothing
+	}
+
 	if name == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
@@ -45,6 +51,7 @@ func CreateExercise(ctx *gin.Context) {
 	exercise.Mechanic = mechanic
 	exercise.Level = level
 	exercise.Force = force
+	exercise.UserID = user.ID
 
 	exercise.Instructions = instructions
 
@@ -423,8 +430,14 @@ func GetMyExercises(ctx *gin.Context) {
 
 func DeleteExercise(ctx *gin.Context) {
 	id := ctx.Param("id")
+	user, authErr := middleware.GetUser(ctx)
+
+	if authErr != nil {
+		// do nothing
+	}
+
 	exercise := new(models.Exercise)
-	database.DB.Where("id = ?", id).First(exercise)
+	database.DB.Where("id = ? and user_id = ?", id, user.ID).First(exercise)
 
 	err := database.DB.Delete(exercise).Error
 	if err != nil {
