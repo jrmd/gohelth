@@ -161,7 +161,10 @@ export const Exercises = () => {
                             <p className="text-sm font-medium">Rows per page</p>
                             <Select
                                 value={`${perPage}`}
-                                onValueChange={setPerPage}
+                                onValueChange={(value) => {
+                                    setPage(1);
+                                    setPerPage(value)
+                                }}
                             >
                                 <SelectTrigger className="h-8 w-[70px]">
                                     <SelectValue placeholder={perPage} />
