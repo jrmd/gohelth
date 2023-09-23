@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/godruoyi/go-snowflake"
-	"github.com/jackc/pgtype"
 	"gorm.io/gorm"
 )
 
@@ -20,8 +19,9 @@ type WorkoutExercise struct {
 	Workout    Workout
 	ExerciseID int64
 	Exercise   Exercise
-	Sets       pgtype.JSONB `gorm:"type:jsonb;default:'[]';not null"`
-	RestTime   string       `gorm:"default:'01:00';not null"`
+	Sets       string `gorm:"type:json;default:'[]';not null"`
+	RestTime   string `gorm:"default:'01:00';not null"`
+	Order      int
 }
 
 func (exercise *WorkoutExercise) BeforeCreate(scope *gorm.DB) error {

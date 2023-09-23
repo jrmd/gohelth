@@ -23,8 +23,8 @@ type User struct {
 	gorm.Model
 	ID          int64     `json:",string" gorm:"primary_key"`
 	DisplayName string    `json:"displayName,omitempty"`
-	Password    string    `json:"-" binding:"required"`
-	Email       string    `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty" binding:"required,email"`
+	Password    string    `json:"-"`
+	Email       string    `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty"`
 	UserLevel   UserLevel `json:"userLevel"`
 	UserStatus  UserStatus
 	Workouts    []Workout

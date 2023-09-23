@@ -22,4 +22,9 @@ func RegisterUserApiRoutes(route *gin.RouterGroup) {
 	route.DELETE("/exercise/:id", controllers.DeleteExercise)
 	route.PATCH("/exercise/:id", controllers.UpdateExercise)
 
+	route.GET("/workout/:id", controllers.GetWorkout)
+	route.PUT("/workout", controllers.CreateWorkout)
+	route.GET("/workout", controllers.GetWorkouts)
+	route.DELETE("/workout/:id", controllers.DeleteWorkout)
+	route.PATCH("/workout/:id", controllers.UpdateWorkout)
 }
