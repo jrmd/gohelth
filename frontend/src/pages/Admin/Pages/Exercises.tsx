@@ -1,8 +1,18 @@
 import { useTitle } from "hoofd";
 import { useEffect, useState } from "preact/hooks";
 import {Table, TableBody, TableDefinition, TableHead, TableHeading, TableRow} from "../../../components/Table";
-import {Input} from "../../../components/Input";
-import {Button} from "../../../components/Button";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {Label} from "@/components/ui/label";
+import {Separator} from "@/components/ui/separator";
+
+import {
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    DoubleArrowLeftIcon,
+    DoubleArrowRightIcon,
+} from "@radix-ui/react-icons"
 
 const displayExercise = (cats, level = 0) => (
     <Table>
@@ -60,11 +70,13 @@ export const Exercises = () => {
     const [categoryFilter, setCategoryFilter] = useState("");
     const [primaryMuscle, setPrimaryMuscle] = useState("");
     const [secondaryMuscle, setSecondaryMuscle] = useState("");
+    const [perPage, setPerPage] = useState("20");
 
     const fetchExercises = async (signal) => {
         try {
             const url = new URL(window.location.origin + '/api/v1/admin/exercises');
             url.searchParams.set("page", page);
+            url.searchParams.set("perPage", perPage);
             if (search.length > 0) {
                 url.searchParams.set("name", search);
             }
@@ -128,7 +140,7 @@ export const Exercises = () => {
         return () => {
             signal.abort()
         }
-    }, [page, search, level, force, mechanic, primaryMuscle, secondaryMuscle, categoryFilter]);
+    }, [page, search, level, force, mechanic, primaryMuscle, secondaryMuscle, perPage, categoryFilter]);
 
     useEffect(() => {
         void fetchCategories();
@@ -144,81 +156,177 @@ export const Exercises = () => {
                         setPage(1)
                         setSearch(event.target.value)
                     }} />
+                    <div className="flex items-center justify-end space-x-6 lg:space-x-8 col-span-3">
+                        <div className="flex items-center space-x-2">
+                            <p className="text-sm font-medium">Rows per page</p>
+                            <Select
+                                value={`${perPage}`}
+                                onValueChange={setPerPage}
+                            >
+                                <SelectTrigger className="h-8 w-[70px]">
+                                    <SelectValue placeholder={perPage} />
+                                </SelectTrigger>
+                                <SelectContent side="top">
+                                    {[10, 20, 30, 40, 50, 100].map((pageSize) => (
+                                        <SelectItem key={pageSize} value={`${pageSize}`}>
+                                            {pageSize}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+                            Page {page} of{" "}
+                            {maxPages}
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Button
+                                variant="outline"
+                                className="hidden h-8 w-8 p-0 lg:flex"
+                                onClick={() => setPage((page) => 1)}
+                                disabled={page <= 1}
+                            >
+                                <span className="sr-only">Go to first page</span>
+                                <DoubleArrowLeftIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="h-8 w-8 p-0"
+                                onClick={() => setPage((page) => page - 1)}
+                                disabled={page <= 1}
+                            >
+                                <span className="sr-only">Go to previous page</span>
+                                <ChevronLeftIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="h-8 w-8 p-0"
+                                onClick={() => setPage((page) => page + 1)}
+                                disabled={page === maxPages}
+                            >
+                                <span className="sr-only">Go to next page</span>
+                                <ChevronRightIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="hidden h-8 w-8 p-0 lg:flex"
+                                onClick={() => setPage(maxPages)}
+                                disabled={page === maxPages}
+                            >
+                                <span className="sr-only">Go to last page</span>
+                                <DoubleArrowRightIcon className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+                <Separator className="my-4" />
+                <div className="grid grid-cols-6 gap-2 mb-2">
                     <div>
-
-                        <select onChange={(event) => {
+                        <Label className="mb-2 block">Level</Label>
+                        <Select onValueChange={(value) => {
                             setPage(1)
-                            setLevel(event.target.value)
+                            setLevel(value)
                         }}>
-                            <option value="">Level</option>
-                            <option value="beginner">Beginner</option>
-                            <option value="intermediate">Intermediate</option>
-                            <option value="expert">Expert</option>
-                        </select>
-                        <select onChange={(event) => {
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="">Any</SelectItem>
+                                <SelectItem value="beginner">Beginner</SelectItem>
+                                <SelectItem value="intermediate">Intermediate</SelectItem>
+                                <SelectItem value="expert">Expert</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label className="mb-2 block">Force</Label>
+                        <Select onChange={(event) => {
                             setPage(1)
                             setForce(event.target.value)
                         }}>
-                            <option value="">Force</option>
-                            <option value="push">Push</option>
-                            <option value="pull">Pull</option>
-                            <option value="static">Static</option>
-                        </select>
-                        <select onChange={(event) => {
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="">Any</SelectItem>
+                                <SelectItem value="push">Push</SelectItem>
+                                <SelectItem value="pull">Pull</SelectItem>
+                                <SelectItem value="static">Static</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label className="mb-2 block">Mechanic</Label>
+                        <Select onChange={(event) => {
                             setPage(1)
                             setMechanic(event.target.value)
                         }}>
-                            <option value="">Mechanic</option>
-                            <option value="isolation">Isolation</option>
-                            <option value="compound">Compound</option>
-                        </select>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="">Any</SelectItem>
+                                <SelectItem value="isolation">Isolation</SelectItem>
+                                <SelectItem value="compound">Compound</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div>
-                        <select onChange={(event) => {
+                        <Label className="mb-2 block">Category</Label>
+                        <Select onChange={(event) => {
                             setPage(1)
                             setCategoryFilter(event.target.value)
                         }}>
-                            <option value="">Category</option>
-                            {categories.map((category) => {
-                                console.log(category)
-                                return (
-                                    <option value={category.ID}>{category.Name}</option>
-                                )
-                            })}
-                        </select>
-                        <select onChange={(event) => {
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="">Any</SelectItem>
+                                {categories.map((category) => {
+                                    return (
+                                        <SelectItem value={category.ID}>{category.Name}</SelectItem>
+                                    )
+                                })}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label className="mb-2 block">Primary Muscle</Label>
+                        <Select onChange={(event) => {
                             setPage(1)
                             setPrimaryMuscle(event.target.value)
                         }}>
-                            <option value="">Primary</option>
-                            {muscles.map((muscle) => (
-                                <option value={muscle.ID}>{muscle.Name}</option>
-                            ))}
-                        </select>
-                        <select onChange={(event) => {
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="">Any</SelectItem>
+                                {muscles.map((muscle) => (
+                                    <SelectItem value={muscle.ID}>{muscle.Name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label className="mb-2 block">Secondary Muscle</Label>
+                        <Select onChange={(event) => {
                             setPage(1)
                             setSecondaryMuscle(event.target.value)
                         }}>
-                            <option value="">Secondary</option>
-                            {muscles.map((muscle) => (
-                                <option value={muscle.ID}>{muscle.Name}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <div></div>
-                        { page > 1 && (
-                            <Button onClick={() => {
-                                setPage((currentPage) => currentPage - 1)
-                            }}>Previous Page</Button>
-                        )}
-                        { page < maxPages && (
-                            <Button onClick={() => {
-                                setPage((currentPage) => currentPage + 1)
-                            }}>Next Page</Button>
-                        )}
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="">Any</SelectItem>
+                                <SelectItem value="">Secondary</SelectItem>
+                                {muscles.map((muscle) => (
+                                    <SelectItem value={muscle.ID}>{muscle.Name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
+
                 {displayExercise(exercises)}
             </div>
         </div>

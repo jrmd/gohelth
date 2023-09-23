@@ -249,6 +249,7 @@ func GetExercise(ctx *gin.Context) {
 func GetExercises(ctx *gin.Context) {
 	var PerPage float64 = 100
 	pageStr := ctx.Query("page")
+	perPageStr := ctx.Query("perPage")
 	name := ctx.Query("name")
 	level := ctx.Query("level")
 	machine := ctx.Query("machine")
@@ -272,6 +273,12 @@ func GetExercises(ctx *gin.Context) {
 
 	if err != nil {
 		page = 1
+	}
+
+	perPage, err := strconv.Atoi(perPageStr)
+
+	if err != nil {
+		perPage = int(PerPage)
 	}
 
 	var exercises []models.Exercise
@@ -327,7 +334,7 @@ func GetExercises(ctx *gin.Context) {
 	if page == -1 {
 		db.Order("name asc").Find(&exercises)
 	} else {
-		db.Limit(int(PerPage)).Offset((page - 1) * int(PerPage)).Order("name asc").Find(&exercises)
+		db.Limit(perPage).Offset((page - 1) * perPage).Order("name asc").Find(&exercises)
 	}
 
 	var data []models.Exercise
@@ -340,7 +347,7 @@ func GetExercises(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"data":        data,
-		"maxPages":    math.Ceil(float64(count) / PerPage),
+		"maxPages":    math.Ceil(float64(count) / float64(perPage)),
 		"currentPage": page,
 	})
 }

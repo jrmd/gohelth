@@ -2,7 +2,7 @@ import { useTitle } from "hoofd";
 import { useEffect, useState } from "preact/hooks";
 import {Table, TableBody, TableDefinition, TableHead, TableHeading, TableRow} from "../../../components/Table";
 import {Input} from "../../../components/Input";
-import {Button} from "../../../components/Button";
+import {Button} from "@/components/ui/button";
 
 const displayUser = (cats, level = 0) => (
     <Table>

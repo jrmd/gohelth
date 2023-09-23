@@ -15,7 +15,7 @@ import {SignUp} from "./pages/Auth/SignUp";
 import {Admin} from "./pages/Admin";
 import {SignOut} from "./pages/Auth/SignOut";
 import {NotAllowed} from "./pages/_403";
-
+import { Toaster } from "@/components/ui/toaster"
 
 export function App() {
 	useTitleTemplate('%s - Helth');
@@ -66,6 +66,7 @@ export function App() {
 						<NotAllowed path="/unauthorized" />
 						<NotFound default />
 					</Router>
+					<Toaster />
 				</main>
 			</AuthProvider>
 	);
