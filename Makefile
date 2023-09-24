@@ -18,6 +18,7 @@ build:
 
 production:
 	cd frontend
+	pnpm install
 	pnpm build
 	cd ../
 	docker-compose -f docker-compose-prod.yml down

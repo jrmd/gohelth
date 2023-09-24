@@ -1,6 +1,6 @@
 import { useTitle } from "hoofd";
 import { useEffect, useRef, useState } from "preact/hooks";
-import {Button} from "../../../components/Button";
+import {Button} from "@/components/ui/button";
 
 export const CategoryImport = () => {
     useTitle("Categories");

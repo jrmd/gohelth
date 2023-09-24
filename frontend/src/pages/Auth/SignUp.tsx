@@ -1,6 +1,6 @@
 import { useRef, useState } from 'preact/hooks';
 import { useAuth } from "../../helpers";
-import { Button } from "../../components/Button";
+import {Button} from "@/components/ui/button";
 import {Input} from "../../components/Input";
 import { useTitle } from "hoofd";
 
