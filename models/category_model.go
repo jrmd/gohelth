@@ -2,17 +2,18 @@ package models
 
 import (
 	"fmt"
+	"helth/infra/database"
+
 	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
-	"helth/infra/database"
 )
 
 type Category struct {
 	gorm.Model
-	ID        int64 `json:",string" gorm:"primary_key"`
-	Name      string
-	ParentId  int64      `gorm:"index"`
-	Exercises []Exercise `gorm:"many2many:exercise_category"`
+	ID        int64      `json:"id,string" gorm:"primary_key"`
+	Name      string     `json:"name"`
+	ParentId  int64      `json:"parentId" gorm:"index"`
+	Exercises []Exercise `json:"exercises" gorm:"many2many:exercise_category"`
 }
 
 func (category *Category) BeforeCreate(scope *gorm.DB) error {

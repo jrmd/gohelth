@@ -1,28 +1,29 @@
 package models
 
 import (
+	"helth/infra/database"
+
 	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
-	"helth/infra/database"
 )
 
 type Exercise struct {
 	gorm.Model
-	ID               int64 `json:",string" gorm:"primary_key"`
-	Name             string
-	SupportsWeight   bool
-	SupportsTime     bool
-	SupportsDistance bool
-	Instructions     string
-	Public           bool
-	Force            string
-	Level            string
-	Equipment        string
-	Mechanic         string
-	UserID           int64      `gorm:"index"`
-	Categories       []Category `gorm:"many2many:exercise_category"`
-	PrimaryMuscles   []Muscle   `gorm:"many2many:exercise_primary_muscle"`
-	SecondaryMuscles []Muscle   `gorm:"many2many:exercise_secondary_muscle"`
+	ID               int64      `json:"id,string" gorm:"primary_key"`
+	Name             string     `json:"name"`
+	SupportsWeight   bool       `json:"supportsWeight"`
+	SupportsTime     bool       `json:"supportsTime"`
+	SupportsDistance bool       `json:"supportsDistance"`
+	Instructions     string     `json:"instructions"`
+	Public           bool       `json:"public"`
+	Force            string     `json:"force"`
+	Level            string     `json:"level"`
+	Equipment        string     `json:"equipment"`
+	Mechanic         string     `json:"mechanic"`
+	UserID           int64      `json:"userId,string" gorm:"index"`
+	Categories       []Category `json:"categories" gorm:"many2many:exercise_category"`
+	PrimaryMuscles   []Muscle   `json:"primaryMuscles" gorm:"many2many:exercise_primary_muscle"`
+	SecondaryMuscles []Muscle   `json:"secondaryMuscles" gorm:"many2many:exercise_secondary_muscle"`
 }
 
 func (exercise *Exercise) BeforeCreate(scope *gorm.DB) error {

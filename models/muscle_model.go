@@ -1,17 +1,18 @@
 package models
 
 import (
+	"helth/infra/database"
+
 	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
-	"helth/infra/database"
 )
 
 type Muscle struct {
 	gorm.Model
-	ID int64 `json:",string" gorm:"primary_key"`
+	ID int64 `json:"id,string" gorm:"primary_key"`
 
-	Name     string
-	ParentId int64 `gorm:"index"`
+	Name     string `json:"name"`
+	ParentId int64  `gorm:"index"`
 }
 
 func (muscle *Muscle) BeforeCreate(scope *gorm.DB) error {

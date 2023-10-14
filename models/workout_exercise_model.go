@@ -13,15 +13,14 @@ type WorkoutSet struct {
 
 type WorkoutExercise struct {
 	gorm.Model
-	ID         int64 `json:",string" gorm:"primary_key"`
-	Name       string
-	WorkoutID  int64
-	Workout    Workout
-	ExerciseID int64
-	Exercise   Exercise
-	Sets       string `gorm:"type:json;default:'[]';not null"`
-	RestTime   string `gorm:"default:'01:00';not null"`
-	Order      int
+	ID         int64    `json:"id,string" gorm:"primary_key"`
+	WorkoutID  int64    `json:"workoutId"`
+	Workout    Workout  `json:"-"`
+	ExerciseID int64    `json:"exerciseId"`
+	Exercise   Exercise `json:"exercise"`
+	Sets       string   `json:"sets" gorm:"type:json;default:'[]';not null"`
+	RestTime   string   `json:"restTime" gorm:"default:'01:00';not null"`
+	Order      int      `json:"order"`
 }
 
 func (exercise *WorkoutExercise) BeforeCreate(scope *gorm.DB) error {

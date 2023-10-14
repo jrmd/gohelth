@@ -1,5 +1,6 @@
 import { render } from 'preact';
 import Router from 'preact-router';
+import AsyncRoute from 'preact-async-route';
 import { useEffect } from 'preact/hooks';
 import { useTitleTemplate } from 'hoofd';
 
@@ -62,7 +63,11 @@ export function App() {
 						<SignUp path="/auth/sign-up" />
 						<ActivateError path="/auth/activate/error" />
 						<ActivateEmail path="/auth/activate/success" />
-						<Admin path="/admin/:rest*" />
+						<AsyncRoute
+							path="/admin/:rest*"
+							getComponent={() => import('./pages/Admin').then(module => module.Admin)}
+							loading={() => <div>loading...</div>}
+						/>
 						<NotAllowed path="/unauthorized" />
 						<NotFound default />
 					</Router>

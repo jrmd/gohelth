@@ -41,6 +41,9 @@ dependencies:
   preact:
     specifier: ^10.13.1
     version: 10.17.1
+  preact-async-route:
+    specifier: ^2.2.1
+    version: 2.2.1
   preact-iso:
     specifier: ^2.3.1
     version: 2.3.1(preact-render-to-string@6.2.1)(preact@10.17.1)
@@ -3097,6 +3100,10 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
+
+  /preact-async-route@2.2.1:
+    resolution: {integrity: sha512-8bg1007akXs3YDmzYT4McaTe6ji2FIzcc0/NTlu+vjJaKPNQ8lNG/HQ6LP+FoIxQ4m/KH5vvJCHJN5ADp2iNGA==}
+    dev: false
 
   /preact-iso@2.3.1(preact-render-to-string@6.2.1)(preact@10.17.1):
     resolution: {integrity: sha512-PtiG0dJlyvIDfvqROCybIFq96CS2s8nLg8ZR4Yporx3mPQ5FgWGNKb+ejjewtjEDMdCUlYmMT8SdapWEAxVJ2Q==}

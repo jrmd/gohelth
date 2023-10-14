@@ -37,18 +37,18 @@ const displayExercise = (cats, level = 0) => (
             return (
                 <TableRow>
                     {/*<TableDefinition>{exercise.ID}</TableDefinition>*/}
-                    <TableDefinition>{exercise.Name}</TableDefinition>
+                    <TableDefinition>{exercise.name}</TableDefinition>
                     {/*<TableDefinition>{exercise.SupportsWeight ? 'true' : 'false'}</TableDefinition>*/}
                     {/*<TableDefinition>{exercise.SupportsTime ? 'true' : 'false'}</TableDefinition>*/}
                     {/*<TableDefinition>{exercise.SupportsDistance ? 'true' : 'false'}</TableDefinition>*/}
-                    <TableDefinition>{exercise.Categories.map(category => category.Name).join(',')}</TableDefinition>
-                    <TableDefinition>{exercise.PrimaryMuscles.map(category => category.Name).join(',')}</TableDefinition>
-                    <TableDefinition>{exercise.SecondaryMuscles.map(category => category.Name).join(',')}</TableDefinition>
-                    <TableDefinition>{exercise.Level}</TableDefinition>
-                    <TableDefinition>{exercise.Force}</TableDefinition>
-                    <TableDefinition>{exercise.Mechanic}</TableDefinition>
-                    <TableDefinition>{exercise.Equipment}</TableDefinition>
-                    <TableDefinition>{exercise.Public ? 'Public' : 'Private'}</TableDefinition>
+                    <TableDefinition>{exercise.categories.map(category => category.name).join(',')}</TableDefinition>
+                    <TableDefinition>{exercise.primaryMuscles.map(category => category.name).join(',')}</TableDefinition>
+                    <TableDefinition>{exercise.secondaryMuscles.map(category => category.name).join(',')}</TableDefinition>
+                    <TableDefinition>{exercise.level}</TableDefinition>
+                    <TableDefinition>{exercise.force}</TableDefinition>
+                    <TableDefinition>{exercise.mechanic}</TableDefinition>
+                    <TableDefinition>{exercise.equipment}</TableDefinition>
+                    <TableDefinition>{exercise.public ? 'Public' : 'Private'}</TableDefinition>
                 </TableRow>
             )
         })}
@@ -103,7 +103,7 @@ export const Exercises = () => {
                 return;
             }
             const response = await resp.json();
-    
+
             setExercises(() => {
                return [...response.data]
             });

@@ -1,22 +1,23 @@
 package models
 
 import (
-	"github.com/godruoyi/go-snowflake"
-	"gorm.io/gorm"
 	"helth/infra/database"
 	"time"
+
+	"github.com/godruoyi/go-snowflake"
+	"gorm.io/gorm"
 )
 
 type Workout struct {
 	gorm.Model
-	ID        int64 `json:",string" gorm:"primary_key"`
-	Name      string
-	StartTime time.Time
-	EndTime   time.Time
-	Public    bool
-	UserID    string
-	User      User
-	Exercises []WorkoutExercise
+	ID        int64             `json:"id,string" gorm:"primary_key"`
+	Name      string            `json:"name"`
+	StartTime time.Time         `json:"startTime"`
+	EndTime   time.Time         `json:"endTime"`
+	Public    bool              `json:"public"`
+	UserID    string            `json:"userId"`
+	User      User              `json:"user"`
+	Exercises []WorkoutExercise `json:"exercises"`
 }
 
 func (workout *Workout) BeforeCreate(scope *gorm.DB) error {

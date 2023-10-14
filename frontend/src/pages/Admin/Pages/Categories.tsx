@@ -6,7 +6,7 @@ const displayCategory = (cats, level = 0) => (
     <ul className={cn("list-disc", level === 0 ? '' : `ml4`)}>
         {cats.map(category => {
             return (
-                <li>{category.Name}
+                <li>{category.name}
                     {category.children.length > 0  && displayCategory(category.children, level + 1)}
                 </li>
             )
@@ -43,16 +43,16 @@ export const Categories = () => {
         setCategories((categories) => {
             const all = [...categories, ...response.data];
             const [parents, children] =  all.reduce(([parents, children], current) => {
-                if (!current.ParentId) {
-                    parents[current.ID] = current;
+                if (!current.parentId) {
+                    parents[current.id] = current;
                     return [parents, children];
                 }
 
-                if (!children[current.ParentId]) {
-                    children[current.ParentId] = [];
+                if (!children[current.parentId]) {
+                    children[current.parentId] = [];
                 }
 
-                children[current.ParentId].push(current);
+                children[current.parentId].push(current);
                 return [parents, children];
             }, [{}, {}]);
 
