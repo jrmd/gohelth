@@ -287,7 +287,7 @@ export const Exercises = () => {
                                 <SelectItem value="">Any</SelectItem>
                                 {categories.map((category) => {
                                     return (
-                                        <SelectItem value={category.ID}>{category.Name}</SelectItem>
+                                        <SelectItem value={category.id}>{category.name}</SelectItem>
                                     )
                                 })}
                             </SelectContent>
@@ -305,7 +305,7 @@ export const Exercises = () => {
                             <SelectContent>
                                 <SelectItem value="">Any</SelectItem>
                                 {muscles.map((muscle) => (
-                                    <SelectItem value={muscle.ID}>{muscle.Name}</SelectItem>
+                                    <SelectItem value={muscle.id}>{muscle.name}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -323,7 +323,7 @@ export const Exercises = () => {
                                 <SelectItem value="">Any</SelectItem>
                                 <SelectItem value="">Secondary</SelectItem>
                                 {muscles.map((muscle) => (
-                                    <SelectItem value={muscle.ID}>{muscle.Name}</SelectItem>
+                                    <SelectItem value={muscle.id}>{muscle.name}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
