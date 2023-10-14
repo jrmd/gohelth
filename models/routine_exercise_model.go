@@ -1,13 +1,14 @@
 package models
 
 import (
+	"helth/infra/database"
+
 	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
 )
 
 type RoutineExercise struct {
-	gorm.Model
-	ID         int64 `json:",string" gorm:"primary_key"`
+	database.Model
 	Name       string
 	RoutineID  int64
 	Routine    Routine

@@ -1,6 +1,6 @@
 import { useTitle } from "hoofd";
 import { useEffect, useState } from "preact/hooks";
-import {Table, TableBody, TableDefinition, TableHead, TableHeading, TableRow} from "../../../components/Table";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
@@ -16,39 +16,41 @@ import {
 
 const displayExercise = (cats, level = 0) => (
     <Table>
-        <TableHead>
-            {/*<TableHeading>ID</TableHeading>*/}
-            <TableHeading>Name</TableHeading>
-            {/*<TableHeading>Supports Weight</TableHeading>*/}
-            {/*<TableHeading>Supports Time</TableHeading>*/}
-            {/*<TableHeading>Supports Distance</TableHeading>*/}
-            <TableHeading>Categories</TableHeading>
-            <TableHeading>Primary Muscles</TableHeading>
-            <TableHeading>Secondary Muscles</TableHeading>
-            <TableHeading>Level</TableHeading>
-            <TableHeading>Force</TableHeading>
-            <TableHeading>Mechanic</TableHeading>
-            <TableHeading>Equipment</TableHeading>
-            <TableHeading>Public</TableHeading>
-        </TableHead>
+        <TableHeader>
+            <TableRow>
+                {/*<TableHead>ID</TableHead>*/}
+                <TableHead>Name</TableHead>
+                {/*<TableHead>Supports Weight</TableHead>*/}
+                {/*<TableHead>Supports Time</TableHead>*/}
+                {/*<TableHead>Supports Distance</TableHead>*/}
+                <TableHead>Categories</TableHead>
+                <TableHead>Primary Muscles</TableHead>
+                <TableHead>Secondary Muscles</TableHead>
+                <TableHead>Level</TableHead>
+                <TableHead>Force</TableHead>
+                <TableHead>Mechanic</TableHead>
+                <TableHead>Equipment</TableHead>
+                <TableHead>Public</TableHead>
+            </TableRow>
+        </TableHeader>
         <TableBody>
 
         {cats.map(exercise => {
             return (
                 <TableRow>
-                    {/*<TableDefinition>{exercise.ID}</TableDefinition>*/}
-                    <TableDefinition>{exercise.name}</TableDefinition>
-                    {/*<TableDefinition>{exercise.SupportsWeight ? 'true' : 'false'}</TableDefinition>*/}
-                    {/*<TableDefinition>{exercise.SupportsTime ? 'true' : 'false'}</TableDefinition>*/}
-                    {/*<TableDefinition>{exercise.SupportsDistance ? 'true' : 'false'}</TableDefinition>*/}
-                    <TableDefinition>{exercise.categories.map(category => category.name).join(',')}</TableDefinition>
-                    <TableDefinition>{exercise.primaryMuscles.map(category => category.name).join(',')}</TableDefinition>
-                    <TableDefinition>{exercise.secondaryMuscles.map(category => category.name).join(',')}</TableDefinition>
-                    <TableDefinition>{exercise.level}</TableDefinition>
-                    <TableDefinition>{exercise.force}</TableDefinition>
-                    <TableDefinition>{exercise.mechanic}</TableDefinition>
-                    <TableDefinition>{exercise.equipment}</TableDefinition>
-                    <TableDefinition>{exercise.public ? 'Public' : 'Private'}</TableDefinition>
+                    {/*<TableCell>{exercise.ID}</TableCell>*/}
+                    <TableCell>{exercise.name}</TableCell>
+                    {/*<TableCell>{exercise.SupportsWeight ? 'true' : 'false'}</TableCell>*/}
+                    {/*<TableCell>{exercise.SupportsTime ? 'true' : 'false'}</TableCell>*/}
+                    {/*<TableCell>{exercise.SupportsDistance ? 'true' : 'false'}</TableCell>*/}
+                    <TableCell>{exercise.categories.map(category => category.name).join(',')}</TableCell>
+                    <TableCell>{exercise.primaryMuscles.map(category => category.name).join(',')}</TableCell>
+                    <TableCell>{exercise.secondaryMuscles.map(category => category.name).join(',')}</TableCell>
+                    <TableCell>{exercise.level}</TableCell>
+                    <TableCell>{exercise.force}</TableCell>
+                    <TableCell>{exercise.mechanic}</TableCell>
+                    <TableCell>{exercise.equipment}</TableCell>
+                    <TableCell>{exercise.public ? 'Public' : 'Private'}</TableCell>
                 </TableRow>
             )
         })}

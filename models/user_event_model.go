@@ -1,9 +1,11 @@
 package models
 
 import (
+	"helth/infra/database"
+	"time"
+
 	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
-	"time"
 )
 
 type UserEventType string
@@ -14,7 +16,7 @@ const (
 )
 
 type UserEvent struct {
-	gorm.Model
+	database.Model
 	UserID    int64
 	User      User
 	EventType UserEventType

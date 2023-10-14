@@ -1,12 +1,14 @@
 package database
 
 import (
+	"log"
+	"time"
+
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/plugin/dbresolver"
-	"log"
 )
 
 var (
@@ -48,4 +50,11 @@ func DbConnection(masterDSN, replicaDSN string) error {
 // GetDB connection
 func GetDB() *gorm.DB {
 	return DB
+}
+
+type Model struct {
+	ID        int64          `json:"id,string" gorm:"primarykey"`
+	CreatedAt time.Time      `json:"createdAt"`
+	UpdatedAt time.Time      `json:"updatedAt"`
+	DeletedAt gorm.DeletedAt `json:"deletedAt" gorm:"index"`
 }

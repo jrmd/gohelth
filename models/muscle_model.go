@@ -8,9 +8,7 @@ import (
 )
 
 type Muscle struct {
-	gorm.Model
-	ID int64 `json:"id,string" gorm:"primary_key"`
-
+	database.Model
 	Name     string `json:"name"`
 	ParentId int64  `gorm:"index"`
 }

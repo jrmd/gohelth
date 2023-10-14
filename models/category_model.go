@@ -9,8 +9,7 @@ import (
 )
 
 type Category struct {
-	gorm.Model
-	ID        int64      `json:"id,string" gorm:"primary_key"`
+	database.Model
 	Name      string     `json:"name"`
 	ParentId  int64      `json:"parentId" gorm:"index"`
 	Exercises []Exercise `json:"exercises" gorm:"many2many:exercise_category"`

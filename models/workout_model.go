@@ -9,8 +9,7 @@ import (
 )
 
 type Workout struct {
-	gorm.Model
-	ID        int64             `json:"id,string" gorm:"primary_key"`
+	database.Model
 	Name      string            `json:"name"`
 	StartTime time.Time         `json:"startTime"`
 	EndTime   time.Time         `json:"endTime"`

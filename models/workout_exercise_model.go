@@ -1,6 +1,8 @@
 package models
 
 import (
+	"helth/infra/database"
+
 	"github.com/godruoyi/go-snowflake"
 	"gorm.io/gorm"
 )
@@ -12,8 +14,7 @@ type WorkoutSet struct {
 }
 
 type WorkoutExercise struct {
-	gorm.Model
-	ID         int64    `json:"id,string" gorm:"primary_key"`
+	database.Model
 	WorkoutID  int64    `json:"workoutId"`
 	Workout    Workout  `json:"-"`
 	ExerciseID int64    `json:"exerciseId"`

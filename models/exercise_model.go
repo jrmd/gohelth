@@ -8,8 +8,7 @@ import (
 )
 
 type Exercise struct {
-	gorm.Model
-	ID               int64      `json:"id,string" gorm:"primary_key"`
+	database.Model
 	Name             string     `json:"name"`
 	SupportsWeight   bool       `json:"supportsWeight"`
 	SupportsTime     bool       `json:"supportsTime"`

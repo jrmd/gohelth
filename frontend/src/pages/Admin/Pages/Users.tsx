@@ -1,28 +1,28 @@
 import { useTitle } from "hoofd";
 import { useEffect, useState } from "preact/hooks";
-import {Table, TableBody, TableDefinition, TableHead, TableHeading, TableRow} from "../../../components/Table";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Input} from "../../../components/Input";
 import {Button} from "@/components/ui/button";
 
 const displayUser = (cats, level = 0) => (
     <Table>
-        <TableHead>
-            <TableHeading>ID</TableHeading>
-            <TableHeading>Display Name</TableHeading>
-            <TableHeading>Email</TableHeading>
-            <TableHeading>Status</TableHeading>
-            <TableHeading>UserLevel</TableHeading>
-        </TableHead>
+        <TableHeader>
+            <TableHead>ID</TableHead>
+            <TableHead>Display Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>UserLevel</TableHead>
+        </TableHeader>
         <TableBody>
 
         {cats.map(user => {
             return (
                 <TableRow>
-                    <TableDefinition>{user.ID}</TableDefinition>
-                    <TableDefinition>{user.DisplayName}</TableDefinition>
-                    <TableDefinition>{user.email}</TableDefinition>
-                    <TableDefinition>{user.UserStatus}</TableDefinition>
-                    <TableDefinition>{user.userLevel}</TableDefinition>
+                    <TableCell>{user.ID}</TableCell>
+                    <TableCell>{user.DisplayName}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.UserStatus}</TableCell>
+                    <TableCell>{user.userLevel}</TableCell>
                 </TableRow>
             )
         })}
@@ -47,7 +47,7 @@ export const Users = () => {
                 return;
             }
             const response = await resp.json();
-    
+
             setUsers(() => {
                return [...response.data]
             });
