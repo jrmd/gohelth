@@ -10,6 +10,7 @@ func RegisterUserApiRoutes(route *gin.RouterGroup) {
 	route.GET("/user/settings", controllers.GetSettings)
 	route.POST("/user", controllers.UpdateProfile)
 	route.POST("/user/settings", controllers.UpdateSettings)
+	route.GET("/user/stats", controllers.GetUserStats)
 
 	route.GET("/auth/me", controllers.GetCurrentUser)
 

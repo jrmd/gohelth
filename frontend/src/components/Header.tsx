@@ -1,3 +1,4 @@
+import { Link } from 'preact-router';
 import { useAuth } from '../helpers'
 
 export function Header() {
@@ -37,7 +38,7 @@ export function Header() {
 			</div>
 			<div className="flex flex-1 items-center justify-end space-x-2">
 				<nav className="flex items-center">
-
+					{ user.userLevel === 'ADMIN' && <Link href="/admin">Admin</Link> }
 				</nav>
 			</div>
 		</div>

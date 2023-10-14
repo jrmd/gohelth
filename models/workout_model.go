@@ -28,7 +28,7 @@ func (workout *Workout) BeforeCreate(scope *gorm.DB) error {
 
 func (workout *Workout) Count() int64 {
 	var result int64
-	database.DB.Table("workouts").Count(&result)
+	database.DB.Model(Workout{}).Count(&result)
 
 	return result
 }

@@ -1,11 +1,25 @@
 import './style.css';
+import { useEffect, useState } from "preact/hooks";
 
 import { useTitle } from "hoofd";
 
 export function Home() {
 	useTitle('Home');
+	const [stats, setStats] = useState(false);
 
-	const stats = {};
+    const getStats = async () => {
+        const resp = await fetch('/api/v1/user/stats')
+        if (!resp.ok) {
+            return;
+        }
+
+        const stats = await resp.json();
+        setStats(stats);
+    }
+
+    useEffect(() => {
+        void getStats();
+    }, []);
 
 	return (
 		<div className="p-8 pt-6 container">

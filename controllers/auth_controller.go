@@ -2,17 +2,17 @@ package controllers
 
 import (
 	"errors"
-	"fmt"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
-	"golang.org/x/crypto/bcrypt"
 	"helth/helpers"
 	"helth/infra/database"
 	"helth/models"
 	"helth/repository"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func SignUp(ctx *gin.Context) {
@@ -208,8 +208,6 @@ func GetCurrentUser(ctx *gin.Context) {
 	var user = new(models.User)
 	session := sessions.Default(ctx)
 
-	fmt.Println(session.Get("user"))
-
 	if session.Get("user") == nil {
 		ctx.JSON(http.StatusForbidden, gin.H{
 			"status": "error",
@@ -229,4 +227,20 @@ func GetCurrentUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, user)
+}
+
+func GetUserStats(c *gin.Context) {
+	session := sessions.Default(c)
+	user := session.Get("user")
+
+	var workoutCount int64
+	var routineCount int64
+
+	database.DB.Model(models.Workout{}).Where("user_id = ?", user).Count(&workoutCount)
+	database.DB.Model(models.Routine{}).Where("user_id = ?", user).Count(&routineCount)
+
+	c.JSON(200, gin.H{
+		"workouts": workoutCount,
+		"routines": routineCount,
+	})
 }
