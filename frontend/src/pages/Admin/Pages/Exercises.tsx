@@ -1,11 +1,11 @@
 import { useTitle } from "hoofd";
 import { useEffect, useState } from "preact/hooks";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {Label} from "@/components/ui/label";
-import {Separator} from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 import {
     ChevronLeftIcon,
@@ -35,25 +35,25 @@ const displayExercise = (cats, level = 0) => (
         </TableHeader>
         <TableBody>
 
-        {cats.map(exercise => {
-            return (
-                <TableRow>
-                    {/*<TableCell>{exercise.ID}</TableCell>*/}
-                    <TableCell>{exercise.name}</TableCell>
-                    {/*<TableCell>{exercise.SupportsWeight ? 'true' : 'false'}</TableCell>*/}
-                    {/*<TableCell>{exercise.SupportsTime ? 'true' : 'false'}</TableCell>*/}
-                    {/*<TableCell>{exercise.SupportsDistance ? 'true' : 'false'}</TableCell>*/}
-                    <TableCell>{exercise.categories.map(category => category.name).join(',')}</TableCell>
-                    <TableCell>{exercise.primaryMuscles.map(category => category.name).join(',')}</TableCell>
-                    <TableCell>{exercise.secondaryMuscles.map(category => category.name).join(',')}</TableCell>
-                    <TableCell>{exercise.level}</TableCell>
-                    <TableCell>{exercise.force}</TableCell>
-                    <TableCell>{exercise.mechanic}</TableCell>
-                    <TableCell>{exercise.equipment}</TableCell>
-                    <TableCell>{exercise.public ? 'Public' : 'Private'}</TableCell>
-                </TableRow>
-            )
-        })}
+            {cats.map(exercise => {
+                return (
+                    <TableRow>
+                        {/*<TableCell>{exercise.ID}</TableCell>*/}
+                        <TableCell>{exercise.name}</TableCell>
+                        {/*<TableCell>{exercise.SupportsWeight ? 'true' : 'false'}</TableCell>*/}
+                        {/*<TableCell>{exercise.SupportsTime ? 'true' : 'false'}</TableCell>*/}
+                        {/*<TableCell>{exercise.SupportsDistance ? 'true' : 'false'}</TableCell>*/}
+                        <TableCell>{exercise.categories.map(category => category.name).join(',')}</TableCell>
+                        <TableCell>{exercise.primaryMuscles.map(category => category.name).join(',')}</TableCell>
+                        <TableCell>{exercise.secondaryMuscles.map(category => category.name).join(',')}</TableCell>
+                        <TableCell>{exercise.level}</TableCell>
+                        <TableCell>{exercise.force}</TableCell>
+                        <TableCell>{exercise.mechanic}</TableCell>
+                        <TableCell>{exercise.equipment}</TableCell>
+                        <TableCell>{exercise.public ? 'Public' : 'Private'}</TableCell>
+                    </TableRow>
+                )
+            })}
         </TableBody>
     </Table>
 );
@@ -77,7 +77,7 @@ export const Exercises = () => {
     const fetchExercises = async (signal) => {
         try {
             const url = new URL(window.location.origin + '/api/v1/admin/exercises');
-            url.searchParams.set("page", page);
+            url.searchParams.set("page", page.toString());
             url.searchParams.set("perPage", perPage);
             if (search.length > 0) {
                 url.searchParams.set("name", search);
@@ -107,7 +107,7 @@ export const Exercises = () => {
             const response = await resp.json();
 
             setExercises(() => {
-               return [...response.data]
+                return [...response.data]
             });
             setMaxPage(response.maxPages)
         } catch (e) {
@@ -245,9 +245,9 @@ export const Exercises = () => {
                     </div>
                     <div>
                         <Label className="mb-2 block">Force</Label>
-                        <Select onChange={(event) => {
+                        <Select onValueChange={(value) => {
                             setPage(1)
-                            setForce(event.target.value)
+                            setForce(value)
                         }}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Any" />
@@ -262,9 +262,9 @@ export const Exercises = () => {
                     </div>
                     <div>
                         <Label className="mb-2 block">Mechanic</Label>
-                        <Select onChange={(event) => {
+                        <Select onValueChange={(value) => {
                             setPage(1)
-                            setMechanic(event.target.value)
+                            setMechanic(value)
                         }}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Any" />
@@ -278,9 +278,9 @@ export const Exercises = () => {
                     </div>
                     <div>
                         <Label className="mb-2 block">Category</Label>
-                        <Select onChange={(event) => {
-                            setPage(1)
-                            setCategoryFilter(event.target.value)
+                        <Select onValueChange={(value) => {
+                            setPage(1);
+                            setCategoryFilter(value);
                         }}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Any" />
@@ -297,9 +297,9 @@ export const Exercises = () => {
                     </div>
                     <div>
                         <Label className="mb-2 block">Primary Muscle</Label>
-                        <Select onChange={(event) => {
+                        <Select onValueChange={(value) => {
                             setPage(1)
-                            setPrimaryMuscle(event.target.value)
+                            setPrimaryMuscle(value)
                         }}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Any" />
@@ -314,9 +314,10 @@ export const Exercises = () => {
                     </div>
                     <div>
                         <Label className="mb-2 block">Secondary Muscle</Label>
-                        <Select onChange={(event) => {
+                        <Select onValueChange={(value) => {
+                            console.log(value);
                             setPage(1)
-                            setSecondaryMuscle(event.target.value)
+                            setSecondaryMuscle(value)
                         }}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Any" />
