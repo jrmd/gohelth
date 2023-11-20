@@ -19,8 +19,9 @@ func SignUp(ctx *gin.Context) {
 	user := new(models.User)
 	email := ctx.DefaultPostForm("email", "")
 	password := ctx.DefaultPostForm("password", "")
+	displayName := ctx.DefaultPostForm("displayName", "")
 
-	if email == "" || password == "" {
+	if email == "" || password == "" || displayName == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": "error",
 			"error":  "Email and password is required",
@@ -52,6 +53,7 @@ func SignUp(ctx *gin.Context) {
 	user.Password = string(hashedPass)
 	user.UserLevel = models.USER
 	user.UserStatus = models.PENDING
+	user.DisplayName = displayName
 
 	userErr := repository.Save(user)
 
@@ -78,14 +80,7 @@ func SignUp(ctx *gin.Context) {
 
 	repository.Save(userEvent)
 
-	err = helpers.SendMail(email, "Activate your account!", "Activate it here:"+viper.GetString("DOMAIN_NAME")+"/auth/activate/"+strconv.Itoa(int(user.ID))+"/"+userEvent.Token)
-
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Something went wrong!",
-		})
-		return
-	}
+	go helpers.SendMail(email, "Activate your account!", "Activate it here:"+viper.GetString("DOMAIN_NAME")+"/auth/activate/"+strconv.Itoa(int(user.ID))+"/"+userEvent.Token)
 
 	ctx.JSON(http.StatusOK, user)
 }

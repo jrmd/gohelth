@@ -7,21 +7,23 @@ import {Button} from "@/components/ui/button";
 const displayUser = (cats, level = 0) => (
     <Table>
         <TableHeader>
-            <TableHead>ID</TableHead>
-            <TableHead>Display Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>UserLevel</TableHead>
+            <TableRow>
+                <TableHead>ID</TableHead>
+                <TableHead>Display Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>UserLevel</TableHead>
+            </TableRow>
         </TableHeader>
         <TableBody>
 
         {cats.map(user => {
             return (
                 <TableRow>
-                    <TableCell>{user.ID}</TableCell>
-                    <TableCell>{user.DisplayName}</TableCell>
+                    <TableCell>{user.id}</TableCell>
+                    <TableCell>{user.displayName}</TableCell>
                     <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.UserStatus}</TableCell>
+                    <TableCell>{user.userStatus}</TableCell>
                     <TableCell>{user.userLevel}</TableCell>
                 </TableRow>
             )

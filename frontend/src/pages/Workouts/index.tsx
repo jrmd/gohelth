@@ -1,0 +1,1 @@
+export const WorkoutsPage = () => <p>workouts</p>;

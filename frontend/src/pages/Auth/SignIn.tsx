@@ -1,7 +1,7 @@
 import { useRef, useState } from 'preact/hooks';
 import { useAuth } from "../../helpers";
 import {Button} from "@/components/ui/button";
-import {Input} from "../../components/Input";
+import {Input} from "@/components/ui/input";
 import { useTitle } from "hoofd";
 
 export const SignIn = () => {

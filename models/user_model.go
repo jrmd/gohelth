@@ -22,11 +22,11 @@ const (
 
 type User struct {
 	database.Model
-	DisplayName string    `json:"displayName,omitempty"`
-	Password    string    `json:"-"`
-	Email       string    `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty"`
-	UserLevel   UserLevel `json:"userLevel"`
-	UserStatus  UserStatus
+	DisplayName string     `json:"displayName,omitempty"`
+	Password    string     `json:"-"`
+	Email       string     `gorm:"type:varchar(255);uniqueIndex" form:"email" json:"email,omitempty"`
+	UserLevel   UserLevel  `json:"userLevel"`
+	UserStatus  UserStatus `json:"userStatus"`
 	Workouts    []Workout
 	Routines    []Routine
 }

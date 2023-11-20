@@ -1,39 +1,46 @@
 import { useRef, useState } from 'preact/hooks';
 import { useAuth } from "../../helpers";
 import {Button} from "@/components/ui/button";
-import {Input} from "../../components/Input";
+import {Input} from "@/components/ui/input";
 import { useTitle } from "hoofd";
 
 export const SignUp = () => {
     const userRef = useRef();
     const passRef = useRef();
+    const nameRef = useRef();
     const [loading, setLoading] = useState<boolean | string>(false);
     const [success, setSuccess] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
+
     useTitle("Sign Up");
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         event.stopPropagation();
+        setError("")
+        setLoading(true);
+        setSuccess(false);
 
         const fd = new FormData();
         fd.set("email", userRef.current.value);
         fd.set("password", passRef.current.value);
+        fd.set("displayName", nameRef.current.value);
         try {
             const resp = await fetch("/api/v1/auth/sign-up", {
                 method: "POST",
                 body: fd,
             });
 
-            const user = await resp.json();
-
             if (!resp.ok) {
                 setSuccess(false);
                 setLoading(false);
+                setError("something went wrong...")
                 return;
             }
 
             setSuccess(true);
         } catch (e) {
+            setError(e);
             console.log(e);
         }
     }
@@ -85,8 +92,9 @@ export const SignUp = () => {
                         onSubmit={handleSubmit}
                     >
                         <div className="flex flex-col gap-2">
-                            <Input ref={userRef} className="w-full" placeholder="Email" type="email" />
-                            <Input ref={passRef} className="w-full" placeholder="Password" type="password" />
+                            <Input ref={userRef} className="w-full" placeholder="Email" type="email" required />
+                            <Input ref={nameRef} className="w-full" placeholder="Name" type="text" required />
+                            <Input ref={passRef} className="w-full" placeholder="Password" type="password" required />
                             <Button type="submit" disabled={loading === true}>
                                 {/*{isLoading && (*/}
                                 {/*    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />*/}
@@ -95,6 +103,9 @@ export const SignUp = () => {
                             </Button>
                         </div>
                     </form> }
+                    {error && (
+                        <p>{error}</p>
+                    )}
                     {!success && (<p className="px-8 text-center text-sm text-muted-foreground">
                         By clicking continue, you agree to our{" "}
                         <a

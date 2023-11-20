@@ -1,6 +1,7 @@
 import { createContext } from 'preact';
-import {useContext, useState, useEffect } from 'preact/hooks';
-import {shallowEqual} from "./helpers/shallowEqual";
+import { useContext, useState, useEffect } from 'preact/hooks';
+import { shallowEqual } from "./helpers/shallowEqual";
+import { route } from 'preact-router';
 
 export const AuthContext = createContext<{ user: User | boolean, checkAuth: () => void, clearAuth: () => void, isLoading: boolean }>(false)
 
@@ -10,7 +11,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [user, setUser] = useState<User|false>(false)
+    const [user, setUser] = useState<User | false>(false)
 
     const checkAuth = async () => {
         try {
@@ -42,6 +43,7 @@ export const AuthProvider = ({ children }) => {
     const clearAuth = async () => {
         setUser(false);
         await fetch('/api/v1/auth/sign-out', { method: 'POST' });
+        route('/auth/sign-in');
     }
 
     useEffect(() => {
